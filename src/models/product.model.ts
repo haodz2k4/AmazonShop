@@ -13,8 +13,8 @@ interface IProduct {
     deleted: boolean,
     slug: string,
     status: string,
-    createdAt: Date,
-    updatedAt: Date 
+    createdAt?: Date,
+    updatedAt?: Date 
 
 
 }
