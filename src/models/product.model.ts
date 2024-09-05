@@ -1,7 +1,7 @@
 import {ObjectId, Schema, model} from "mongoose"
 import { isURL } from "validator"
 
-interface IProduct {
+export interface IProduct {
     _id: ObjectId
     title: string
     categoryId: ObjectId

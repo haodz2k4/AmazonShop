@@ -1,4 +1,4 @@
-interface PaginationResult {
+export interface PaginationResult {
     currentPage: number,
     limit: number,
     skip: number
