@@ -3,7 +3,7 @@ import Product, {IProduct} from "../models/product.model"
 import { ApiError } from "../utils/error";
 
 interface ProductsOption {
-    filter: Record<string,any>
+    filter: Partial<IProduct>
     pagination: PaginationResult
     sort: Record<string, "asc" | "desc" | 1 | -1> 
     selectFields: string
@@ -21,7 +21,9 @@ export const getAllProductsByQuery = async (option: ProductsOption) => {
         .select(option.selectFields)
 }
 
-
+export const getTotalDocument = async (query?: Partial<IProduct>): Promise<number> => {
+    return await Product.countDocuments(query)
+}
 
 export const getProductByid = async (id: string) => {
     return await Product.findOne({_id: id, ...Deleted})
