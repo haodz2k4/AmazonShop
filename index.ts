@@ -5,7 +5,9 @@ import dotenv from "dotenv"
 dotenv.config()
 import config from "./src/config/config"
 
-
+//route
+import route from "./src/routes/index.route"
+route(app)
 //error middleware 
 import { errorHandle } from "./src/middlewares/error.middleware"
 app.use(errorHandle)

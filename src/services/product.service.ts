@@ -3,7 +3,7 @@ import Product, {IProduct} from "../models/product.model"
 import { ApiError } from "../utils/error";
 
 interface ProductsOption {
-    filter: Partial<IProduct>
+    filter: Partial<Record<keyof IProduct, any>>
     pagination: PaginationResult
     sort: Record<string, "asc" | "desc" | 1 | -1> 
     selectFields: string

@@ -18,7 +18,7 @@ export const getProducts = catchAsync(async (req: Request, res: Response) => {
     const paginateQuery = pick(req.query,["page","limit"])
     const totalDocument = await ProductService.getTotalDocument()
     const pagination = paginate(
-        parseInt(paginateQuery.page as string) || 0,
+        parseInt(paginateQuery.page as string) || 1,
         parseInt(paginateQuery.limit as string) || 30,
         totalDocument
     )
@@ -30,7 +30,7 @@ export const getProducts = catchAsync(async (req: Request, res: Response) => {
         sort[sortKey] = sortValue
     }
     //select fields 
-    const only = req.query.only as string 
+    const only = req.query.only as string || ""
 
     const products = await ProductService.getAllProductsByQuery({
         filter: {...filter, ...rangePrice},
