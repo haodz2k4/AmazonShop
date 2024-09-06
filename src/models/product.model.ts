@@ -49,7 +49,7 @@ const productSchema = new Schema<IProduct>({
 },{
     timestamps: true
 })
-const collectionName = 'products'
+const collectionName = 'product'
 
 productSchema.pre('save', async function(next) {
 
@@ -59,7 +59,7 @@ productSchema.pre('save', async function(next) {
             this.slug = await createUniqueSlug(collectionName, this.title)
         }
         if(this.isModified('categoryId')){
-            const category = await model('categories').findOne({_id: this.categoryId, deleted: false})
+            const category = await model('category').findOne({_id: this.categoryId, deleted: false})
             if(!category){
                 next(new Error('Category is not exists'))
                 return
