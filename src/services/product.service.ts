@@ -21,7 +21,7 @@ export const getAllProductsByQuery = async (option: ProductsOption) => {
         .select(option.selectFields)
 }
 
-export const getTotalDocument = async (query?: Partial<IProduct>): Promise<number> => {
+export const getTotalDocument = async (query?: Partial<Record<keyof IProduct, any>>): Promise<number> => {
     return await Product.countDocuments(query)
 }
 

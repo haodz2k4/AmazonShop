@@ -8,15 +8,16 @@ import paginate from "../helpers/paginate.helper"
 //[GET] "/api/products"
 export const getProducts = catchAsync(async (req: Request, res: Response) => {
 
-    const filter = pick(req.query,["status","highlighted","categoryId"]) 
-    const rangePriceQuery = pick(req.query,["minPrice","maxPrice"])
+    const find = pick(req.query,["status","highlighted","categoryId"]) 
+    const rangePriceQuery = pick(req.query,["minPrice","maxPrice"]) 
     const rangePrice = getRangePrice(
         parseInt(rangePriceQuery.minPrice as string) || 0,
         parseInt(rangePriceQuery.maxPrice as string) 
     ) 
+    const filter ={...find, ...rangePrice}
     //Pagination 
     const paginateQuery = pick(req.query,["page","limit"])
-    const totalDocument = await ProductService.getTotalDocument()
+    const totalDocument = await ProductService.getTotalDocument(filter)
     const pagination = paginate(
         parseInt(paginateQuery.page as string) || 1,
         parseInt(paginateQuery.limit as string) || 30,
@@ -33,7 +34,7 @@ export const getProducts = catchAsync(async (req: Request, res: Response) => {
     const only = req.query.only as string || ""
 
     const products = await ProductService.getAllProductsByQuery({
-        filter: {...filter, ...rangePrice},
+        filter,
         pagination,
         sort,
         selectFields: only
