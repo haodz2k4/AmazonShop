@@ -1,4 +1,4 @@
-import {ObjectId, Schema, model} from "mongoose"
+import {Model, ObjectId, Schema, model} from "mongoose"
 import { isURL } from "validator"
 
 export interface IProduct {
@@ -18,6 +18,7 @@ export interface IProduct {
 
 
 }
+
 const productSchema = new Schema<IProduct>({
     title: {
         type: String,
@@ -47,5 +48,22 @@ const productSchema = new Schema<IProduct>({
 },{
     timestamps: true
 })
+
+productSchema.pre('save', async function(next) {
+
+    try {
+        if(this.isModified('categoryId')){
+            const category = await model('categories').findOne({_id: this.categoryId, deleted: false})
+            if(!category){
+                next(new Error('Category is not exists'))
+                return
+            }
+        }
+        next()
+    } catch (error) {
+        next(error)
+    }
+})
+
 
 export default model<IProduct>("products",productSchema)
