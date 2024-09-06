@@ -47,11 +47,3 @@ export const createProduct = async (productBody: IProduct) => {
    return await Product.create(productBody);
 
 }
-
-export const deleteProductById = async (id: string) => {
-    const product = await Product.findByIdAndUpdate(id,{deleted: true})
-    if(!product){
-        throw new ApiError(404,"products is not found")
-    }
-    
-}

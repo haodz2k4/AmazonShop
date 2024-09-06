@@ -85,4 +85,11 @@ export const updateProduct = catchAsync(async (req: Request, res: Response) => {
     const product = await ProductService.updateProductById(id, body)
     res.status(201).json({message: "Product update was successful", product})
 
+}) 
+
+//[PATCH] "/api/products/:id/delete"
+export const deleteProduct = catchAsync(async (req: Request, res: Response) => {
+    const id = req.params.id 
+    const product = await ProductService.updateProductById(id, {deleted: true})
+    res.status(201).json({message: "Product update was successful", product})
 })

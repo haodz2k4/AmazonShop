@@ -16,4 +16,5 @@ router
     .get(controllers.getProduct) 
     .patch(upload.single('thumbnail'),uploadSingle,controllers.updateProduct)
 router.get("/slug/:slug",controllers.getProductBySlug)
+router.patch("/:id/delete",controllers.deleteProduct)
 export default router
