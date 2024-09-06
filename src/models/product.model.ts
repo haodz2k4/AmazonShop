@@ -27,7 +27,17 @@ const productSchema = new Schema<IProduct>({
         minlength: 2,
         maxlength: 200 
     },
-    categoryId: {type: Schema.Types.ObjectId, required: [true,'categoryId is required'], ref: 'categories'},
+    categoryId: {
+        type: Schema.Types.ObjectId, 
+        required: [true,'categoryId is required'], ref: 'categories',
+        validate: {
+            validator: async function(v: string) {
+                const category = await model('category').findOne({_id: this.categoryId, deleted: false})
+                return category !!
+            },
+            message: 'categoryId is not exists',
+        }
+    },
     description: String,
     highlighted: {type: String, enum: ["0","1"],default: "0"},
     thumbnail: {
@@ -36,7 +46,7 @@ const productSchema = new Schema<IProduct>({
             validator: function(v: string) {
                 return isURL(v)
             },
-            message: 'thumbnail is not valid url'
+            message: 'invalid thumbnail'
         }
     },
     price: {type: Number, min: [0,'Minimum price is 0']},
