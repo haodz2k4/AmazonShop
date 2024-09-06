@@ -11,7 +11,11 @@ import route from "./src/routes/index.route"
 route(app)
 //error middleware 
 import { errorHandle } from "./src/middlewares/error.middleware"
-app.use(errorHandle)
+app.use(errorHandle) 
+//redis 
+import redis from "./src/config/redis"
+redis
+//mongodb
 import database from "./src/config/database"
 database()
 const port = config.port
