@@ -4,6 +4,7 @@ import pick from "../utils/pick"
 import { getRangePrice } from "../helpers/range.helper"
 import * as ProductService from "../services/product.service"
 import paginate from "../helpers/paginate.helper"
+import { buildRegExp } from "../utils/regExp"
 
 //[GET] "/api/products"
 export const getProducts = catchAsync(async (req: Request, res: Response) => {
@@ -14,7 +15,12 @@ export const getProducts = catchAsync(async (req: Request, res: Response) => {
         parseInt(rangePriceQuery.minPrice as string) || 0,
         parseInt(rangePriceQuery.maxPrice as string) 
     ) 
-    const filter ={...find, ...rangePrice}
+    
+    const filter: Record<string,any> ={...find, ...rangePrice}
+    const keyword = req.query.keyword as string 
+    if(keyword){
+        filter.title = buildRegExp(keyword)
+    }
     //Pagination 
     const paginateQuery = pick(req.query,["page","limit"])
     const totalDocument = await ProductService.getTotalDocument(filter)
