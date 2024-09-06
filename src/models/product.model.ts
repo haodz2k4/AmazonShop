@@ -8,14 +8,13 @@ export interface IProduct {
     categoryId: ObjectId
     description: string
     highlighted: string
+    position: number 
     thumbnail: string 
     price: number
     discountPercentage: number 
     deleted: boolean,
     slug: string,
-    status: string,
-    createdAt?: Date,
-    updatedAt?: Date 
+    status: string
 
 
 }
@@ -39,6 +38,7 @@ const productSchema = new Schema<IProduct>({
         },
         
     },
+    position: {type: Number, min: 1},
     description: String,
     highlighted: {type: String, enum: ["0","1"],default: "0"},
     thumbnail: {

@@ -5,11 +5,12 @@ import { uploadSingle } from "../middlewares/uploadCloud.middleware"
 import multer from "multer"
 const upload = multer()
 import { cacheMiddleware } from "../middlewares/cache.middleware"
-
+import { validate } from "../middlewares/validate.middleware"
+import * as Schema from "../validations/product.validation"
 router
     .route("/")
-    .get(cacheMiddleware('products',3600),controllers.getProducts)
-    .post(upload.single('thumbnail'),uploadSingle,controllers.createProduct)
+    .get(validate(Schema.getProducts),cacheMiddleware('products',3600),controllers.getProducts)
+    .post(upload.single('thumbnail'),uploadSingle,validate(Schema.createProduct),controllers.createProduct)
 
 router
     .route("/:id")
