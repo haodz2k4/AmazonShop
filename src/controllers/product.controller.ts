@@ -48,4 +48,11 @@ export const getProducts = catchAsync(async (req: Request, res: Response) => {
 
     res.status(200).json({products, pagination})
 
+}) 
+
+//[POST] "/api/products"
+export const createProduct = catchAsync(async (req: Request, res: Response) => {
+    const body = req.body 
+    const product = await ProductService.createProduct(body)
+    res.status(201).json({message: "create successful products", product})
 })
