@@ -10,7 +10,8 @@ interface ProductsOption {
 }
 
 const Deleted = {deleted: false}
-
+const CACHE_URL = 'product:/api/products'
+const CACHE_URLS = 'products:/api/products'
 export const getAllProductsByQuery = async (option: ProductsOption) => {
 
     return await Product
@@ -41,11 +42,15 @@ export const updateProductById = async (id: string,productBody: Partial<IProduct
     Object.assign(product, productBody)
     await product.save() 
 
+    await CacheService.deleteCache(`${CACHE_URL}/${id}`,`${CACHE_URL}/slug/${product.slug}`)
+    await CacheService.deleteKeysByPattern(`${CACHE_URLS}*`)
     return product
 } 
 
 export const createProduct = async (productBody: IProduct) => {
-    CacheService.deleteCache()
+    
+    await CacheService.deleteKeysByPattern(`${CACHE_URLS}*`)
    return await Product.create(productBody);
 
 }
+

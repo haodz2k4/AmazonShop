@@ -25,22 +25,6 @@ export const cacheMiddleware = (key: string, ttl: string | number) => {
     }
 } 
 
-export const valiationCacheMiddleware = (key: string) => {
-    return async (req: Request, res: Response, next: NextFunction):Promise<void> => {
 
-        try {
-            if (req.method === 'POST') {
-                await CacheService.deleteKeysByPattern(`${key}s:*`);
-            } else {
-                await CacheService.deleteKeysByPattern(`${key}s:*`);
-                await CacheService.deleteCache(`${key}:${req.originalUrl}`);
-            }
-            next();
-        } catch (error) {
-            next(error);
-        }
-
-    }
-}
 
 
