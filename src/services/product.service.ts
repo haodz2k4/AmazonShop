@@ -1,7 +1,7 @@
 import { PaginationResult } from "../helpers/paginate.helper";
 import Product, {IProduct} from "../models/product.model"
 import { ApiError } from "../utils/error";
-
+import * as CacheService from "../services/cache.service"
 interface ProductsOption {
     filter: Partial<Record<keyof IProduct, any>>
     pagination: PaginationResult
@@ -40,10 +40,12 @@ export const updateProductById = async (id: string,productBody: Partial<IProduct
     }
     Object.assign(product, productBody)
     await product.save() 
+
     return product
 } 
 
 export const createProduct = async (productBody: IProduct) => {
+    CacheService.deleteCache()
    return await Product.create(productBody);
 
 }

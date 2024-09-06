@@ -1,4 +1,4 @@
-import {Request, Response} from "express"
+import {NextFunction, Request, Response} from "express"
 import catchAsync from "../utils/catchAync"
 import pick from "../utils/pick"
 import { getRangePrice } from "../helpers/range.helper"
@@ -79,11 +79,12 @@ export const getProductBySlug = catchAsync(async (req: Request, res: Response) =
 }) 
 
 //[PATCH] "/api/products/:id"
-export const updateProduct = catchAsync(async (req: Request, res: Response) => {
+export const updateProduct = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id 
     const body = req.body 
     const product = await ProductService.updateProductById(id, body)
     res.status(201).json({message: "Product update was successful", product})
+    next()
 
 }) 
 

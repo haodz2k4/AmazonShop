@@ -13,7 +13,6 @@ export const cacheMiddleware = (key: string, ttl: string | number) => {
             }
             const originalJson = res.json.bind(res);
     
-            console.log(originalJson)
             res.json = (data) => {
             CacheService.setCache(cacheKey, ttl, data);
             return originalJson(data);
@@ -24,4 +23,24 @@ export const cacheMiddleware = (key: string, ttl: string | number) => {
         }
 
     }
+} 
+
+export const valiationCacheMiddleware = (key: string) => {
+    return async (req: Request, res: Response, next: NextFunction):Promise<void> => {
+
+        try {
+            if (req.method === 'POST') {
+                await CacheService.deleteKeysByPattern(`${key}s:*`);
+            } else {
+                await CacheService.deleteKeysByPattern(`${key}s:*`);
+                await CacheService.deleteCache(`${key}:${req.originalUrl}`);
+            }
+            next();
+        } catch (error) {
+            next(error);
+        }
+
+    }
 }
+
+

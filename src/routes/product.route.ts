@@ -4,7 +4,7 @@ import * as controllers from "../controllers/product.controller"
 import { uploadSingle } from "../middlewares/uploadCloud.middleware"
 import multer from "multer"
 const upload = multer()
-import { cacheMiddleware } from "../middlewares/cache.middleware"
+import { cacheMiddleware, valiationCacheMiddleware } from "../middlewares/cache.middleware"
 
 router
     .route("/")
@@ -13,8 +13,9 @@ router
 
 router
     .route("/:id")
-    .get(cacheMiddleware('products',7200),controllers.getProduct) 
-    .patch(upload.single('thumbnail'),uploadSingle,controllers.updateProduct)
+    .get(cacheMiddleware('product',7200),controllers.getProduct) 
+    .patch(upload.single('thumbnail'),uploadSingle,controllers.updateProduct,valiationCacheMiddleware('product')) 
+    
 router.get("/slug/:slug",controllers.getProductBySlug)
 router.patch("/:id/delete",controllers.deleteProduct)
 export default router

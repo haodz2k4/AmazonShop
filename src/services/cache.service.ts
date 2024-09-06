@@ -27,3 +27,16 @@ export const deleteCache = async (...key: string[]) :Promise<void>=> {
         throw new Error("Cannot be delete cache")
     }
 }
+
+export const deleteKeysByPattern = async (pattern: string) => {
+    let cursor = '0';
+    do {
+        const result = await redis.scan(cursor, 'MATCH', pattern);
+        cursor = result[0];
+        const keys = result[1];
+
+        if (keys.length > 0) {
+            await redis.del(...keys);
+        }
+    } while (cursor !== '0');
+}
