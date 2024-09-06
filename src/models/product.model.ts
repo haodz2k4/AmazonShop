@@ -1,5 +1,6 @@
 import {Model, ObjectId, Schema, model} from "mongoose"
 import { isURL } from "validator"
+import { createUniqueSlug } from "../helpers/slug.helper"
 
 export interface IProduct {
     _id: ObjectId
@@ -48,10 +49,15 @@ const productSchema = new Schema<IProduct>({
 },{
     timestamps: true
 })
+const collectionName = 'products'
 
 productSchema.pre('save', async function(next) {
 
     try {
+
+        if(this.isModified('title')){
+            this.slug = await createUniqueSlug(collectionName, this.title)
+        }
         if(this.isModified('categoryId')){
             const category = await model('categories').findOne({_id: this.categoryId, deleted: false})
             if(!category){
@@ -61,9 +67,8 @@ productSchema.pre('save', async function(next) {
         }
         next()
     } catch (error) {
-        next(error)
+        next(error as any)
     }
 })
 
-
-export default model<IProduct>("products",productSchema)
+export default model<IProduct>(collectionName,productSchema)
