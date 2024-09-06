@@ -11,6 +11,7 @@ router
     .route("/")
     .get(validate(Schema.getProducts),cacheMiddleware('products',3600),controllers.getProducts)
     .post(upload.single('thumbnail'),uploadSingle,validate(Schema.createProduct),controllers.createProduct)
+    .patch(upload.single('thumbnail'),uploadSingle,controllers.updateProducts)
 
 router
     .route("/:id")
