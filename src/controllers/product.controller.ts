@@ -79,12 +79,12 @@ export const getProductBySlug = catchAsync(async (req: Request, res: Response) =
 }) 
 
 //[PATCH] "/api/products/:id"
-export const updateProduct = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+export const updateProduct = catchAsync(async (req: Request, res: Response) => {
     const id = req.params.id 
     const body = req.body 
     const product = await ProductService.updateProductById(id, body)
     res.status(201).json({message: "Product update was successful", product})
-    next()
+    
 
 }) 
 
