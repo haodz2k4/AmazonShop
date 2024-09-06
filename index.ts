@@ -4,7 +4,8 @@ const app = express()
 import dotenv from "dotenv"
 dotenv.config()
 import config from "./src/config/config"
-
+import bodyParser from "body-parser"
+app.use(bodyParser.json())
 //route
 import route from "./src/routes/index.route"
 route(app)

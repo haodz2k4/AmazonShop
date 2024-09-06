@@ -14,5 +14,6 @@ router
 router
     .route("/:id")
     .get(controllers.getProduct) 
+    .patch(upload.single('thumbnail'),uploadSingle,controllers.updateProduct)
 router.get("/slug/:slug",controllers.getProductBySlug)
 export default router

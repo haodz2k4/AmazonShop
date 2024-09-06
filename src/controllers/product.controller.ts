@@ -76,4 +76,13 @@ export const getProductBySlug = catchAsync(async (req: Request, res: Response) =
         throw new ApiError(404,"product is not found")
     }
     res.json({product})
+}) 
+
+//[PATCH] "/api/products/:id"
+export const updateProduct = catchAsync(async (req: Request, res: Response) => {
+    const id = req.params.id 
+    const body = req.body 
+    const product = await ProductService.updateProductById(id, body)
+    res.status(201).json({message: "Product update was successful", product})
+
 })
