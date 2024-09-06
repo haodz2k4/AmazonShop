@@ -30,7 +30,7 @@ export const getProductByid = async (id: string) => {
 } 
 
 export const getProductBySlug = async (slug: string) => {
-    return await Product.findOne({slug,...Deleted})
+    return await Product.findOne({slug,...Deleted}).populate('categoryId','title thumbnail')
 }
 
 export const updateProductById = async (id: string,productBody: Partial<IProduct>) => {

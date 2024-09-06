@@ -11,4 +11,8 @@ router
     .get(controllers.getProducts)
     .post(upload.single('thumbnail'),uploadSingle,controllers.createProduct)
 
+router
+    .route("/:id")
+    .get(controllers.getProduct) 
+router.get("/slug/:slug",controllers.getProductBySlug)
 export default router

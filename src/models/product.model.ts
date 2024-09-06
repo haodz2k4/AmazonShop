@@ -28,15 +28,16 @@ const productSchema = new Schema<IProduct>({
         maxlength: 200 
     },
     categoryId: {
-        type: Schema.Types.ObjectId, 
-        required: [true,'categoryId is required'], ref: 'categories',
+        type: Schema.Types.ObjectId, ref: 'category',
+        required: [true,'categoryId is required'],
         validate: {
             validator: async function(v: string) {
                 const category = await model('category').findOne({_id: this.categoryId, deleted: false})
                 return category !!
             },
             message: 'categoryId is not exists',
-        }
+        },
+        
     },
     description: String,
     highlighted: {type: String, enum: ["0","1"],default: "0"},
@@ -67,13 +68,6 @@ productSchema.pre('save', async function(next) {
 
         if(this.isModified('title')){
             this.slug = await createUniqueSlug(collectionName, this.title)
-        }
-        if(this.isModified('categoryId')){
-            const category = await model('category').findOne({_id: this.categoryId, deleted: false})
-            if(!category){
-                next(new Error('Category is not exists'))
-                return
-            }
         }
         next()
     } catch (error) {

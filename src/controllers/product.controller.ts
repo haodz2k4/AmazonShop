@@ -5,6 +5,7 @@ import { getRangePrice } from "../helpers/range.helper"
 import * as ProductService from "../services/product.service"
 import paginate from "../helpers/paginate.helper"
 import { buildRegExp } from "../utils/regExp"
+import { ApiError } from "../utils/error"
 
 //[GET] "/api/products"
 export const getProducts = catchAsync(async (req: Request, res: Response) => {
@@ -55,4 +56,24 @@ export const createProduct = catchAsync(async (req: Request, res: Response) => {
     const body = req.body 
     const product = await ProductService.createProduct(body)
     res.status(201).json({message: "create successful products", product})
+})
+
+//[GET] "/api/products/:id"
+export const getProduct = catchAsync(async (req: Request, res: Response) => {
+    const {id} = req.params 
+    const product = await ProductService.getProductByid(id);
+    if(!product){
+        throw new ApiError(404,"product is not found")
+    }
+    res.json({product})
+}) 
+
+//[GET] "/api/products/:slug"
+export const getProductBySlug = catchAsync(async (req: Request, res: Response) => {
+    const slug = req.params.slug 
+    const product = await ProductService.getProductBySlug(slug);
+    if(!product){
+        throw new ApiError(404,"product is not found")
+    }
+    res.json({product})
 })
