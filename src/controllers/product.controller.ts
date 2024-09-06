@@ -60,17 +60,16 @@ export const createProduct = catchAsync(async (req: Request, res: Response) => {
 
 //[PATCH] "/api/products"
 export const updateProducts = catchAsync(async (req: Request, res: Response) => {
-    console.log("run here")
     //Format like
     // {
     //     ids: ["1","2","3"],
-    //     objects: {
+    //     updates: {
     //         status: "active"
     //     }
     // }
-    const {ids, objects}: {ids: string[],objects: Record<string,any>} = req.body 
+    const {ids, updates}: {ids: string[],updates: Record<string,any>} = req.body 
     
-    const products = await Promise.all(ids.map(item => ProductService.updateProductById(item,objects)))
+    const products = await Promise.all(ids.map(item => ProductService.updateProductById(item,updates)))
     res.status(200).json({message: "updated product successfully",products})
 
 })
