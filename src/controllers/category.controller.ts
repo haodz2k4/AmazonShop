@@ -3,6 +3,7 @@ import catchAync from "../utils/catchAync";
 import * as CategoryService from "../services/category.service"
 import pick from "../utils/pick";
 import paginateHelper from "../helpers/paginate.helper";
+import { ApiError } from "../utils/error";
 
 //[GET] "/api/categories"
 export const getCategories = catchAync(async (req: Request, res: Response) => {
@@ -27,3 +28,22 @@ export const getCategories = catchAync(async (req: Request, res: Response) => {
     res.json({categories, pagination})
 })
 
+//[GET] "/api/categories/:id"
+export const getCategory = catchAync(async (req: Request, res: Response) => {
+    const {id} = req.params 
+    const category = await CategoryService.getCategoryById(id);
+    if(!category){
+        throw new ApiError(404,"Category is not found")
+    }
+    res.json({category})
+})
+
+//[GET] "/api/categories/:slug"
+export const getCategoryBySlug = catchAync(async (req: Request, res: Response) => {
+    const {slug} = req.params 
+    const category = await CategoryService.getCategoryBySlug(slug);
+    if(!category){
+        throw new ApiError(404,"Category is not found")
+    }
+    res.json({category})
+})
