@@ -3,6 +3,7 @@ import catchAsync from "../utils/catchAync"
 import pick from "../utils/pick"
 import { getRangePrice } from "../helpers/range.helper"
 import * as ProductService from "../services/product.service"
+import { getCategoryBySlug } from "../services/category.service"
 import paginate from "../helpers/paginate.helper"
 import { buildRegExp } from "../utils/regExp"
 import { ApiError } from "../utils/error"
@@ -10,6 +11,7 @@ import { ApiError } from "../utils/error"
 //[GET] "/api/products"
 export const getProducts = catchAsync(async (req: Request, res: Response) => {
 
+                                                    
     const find = pick(req.query,["status","highlighted","categoryId"]) 
     const rangePriceQuery = pick(req.query,["minPrice","maxPrice"]) 
     const rangePrice = getRangePrice(
@@ -39,7 +41,15 @@ export const getProducts = catchAsync(async (req: Request, res: Response) => {
     }
     //select fields 
     const only = req.query.only as string || ""
-
+    //this slug is of category slug 
+    const slug = req.query.slug as string 
+    if(slug){
+        const category = await getCategoryBySlug(slug)
+        if(!category){
+            throw new ApiError(404,"Category is not found")
+        }
+        filter.categoryId = category.id
+    }
     const products = await ProductService.getAllProductsByQuery({
         filter,
         pagination,

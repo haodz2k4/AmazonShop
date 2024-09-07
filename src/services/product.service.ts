@@ -5,8 +5,8 @@ import * as CacheService from "../services/cache.service"
 interface ProductsOption {
     filter: Partial<Record<keyof IProduct, any>>
     pagination: PaginationResult
-    sort: Record<string, "asc" | "desc" | 1 | -1> 
-    selectFields: string
+    sort?: Record<string, "asc" | "desc" | 1 | -1> 
+    selectFields?: string 
 }
 
 const Deleted = {deleted: false}
@@ -19,7 +19,7 @@ export const getAllProductsByQuery = async (option: ProductsOption) => {
         .sort(option.sort)
         .limit(option.pagination.limit)
         .skip(option.pagination.skip)
-        .select(option.selectFields)
+        .select(option.selectFields || "")
 }
 
 export const getTotalDocument = async (query?: Partial<Record<keyof IProduct, any>>): Promise<number> => {

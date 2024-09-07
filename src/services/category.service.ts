@@ -44,3 +44,4 @@ export const updateCategoryById = async (id: string, bodyCategory: Partial<ICate
     await category.save()
     return category
 } 
+

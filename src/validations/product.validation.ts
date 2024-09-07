@@ -14,7 +14,8 @@ export const getProducts = {
         limit: Joi.number().integer().min(1),
         sortKey: Joi.string(),
         sortValue: Joi.string().valid('sortKey','sortValue'),
-        only: Joi.string()
+        only: Joi.string(),
+        slug: Joi.string().custom(Custom.isValidSlug)
     })
 }
 
