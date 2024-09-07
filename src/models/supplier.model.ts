@@ -4,10 +4,12 @@ interface ISupplier {
     _id: ObjectId,
     name: string,
     contactInfo: {
-        email: string,
-        phone: string,
+        email: string
+        phone: string
         address: string 
-    }
+    },
+    deleted: boolean
+    status: string 
 }
 const supplierSchema = new Schema<ISupplier>({
     name: {type: String, required: true, maxlength: 150},
@@ -32,7 +34,9 @@ const supplierSchema = new Schema<ISupplier>({
             }
         },
         address: {type: String, required: true}
-    }
+    },
+    deleted: {type: Boolean, default: false},
+    status: {type: String, enum: ["active","inactive"],default: "active"}
 })
 
 export default model('supplier',supplierSchema)
