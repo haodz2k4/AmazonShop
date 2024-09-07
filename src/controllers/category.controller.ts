@@ -54,3 +54,4 @@ export const createCategory = catchAync(async (req: Request, res: Response) => {
     const category = await CategoryService.createCategory(body)
     res.status(201).json({message: "Created category successfully",category})
 })
+
