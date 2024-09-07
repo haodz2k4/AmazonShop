@@ -31,7 +31,7 @@ export const getCategoryBySlug = async (slug: string) => {
     return await Category.findOne({slug, deleted: false})
 }
 
-export const createProduct = async (bodyCategory: ICategory) => {
+export const createCategory= async (bodyCategory: ICategory) => {
     return await Category.create(bodyCategory)
 }
 

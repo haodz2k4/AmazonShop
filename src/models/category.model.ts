@@ -29,7 +29,8 @@ const categorySchema = new Schema<ICategory>({
     slug: {type: String, unique: true},
     status: {
         type: String,
-        enum: {values: ["active","inactive"], message: 'Status must be either "active" or "inactive"'}
+        enum: {values: ["active","inactive"], message: 'Status must be either "active" or "inactive"'},
+        default: "active"
     },
     parentCategory: Schema.Types.ObjectId,
    

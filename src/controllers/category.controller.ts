@@ -47,3 +47,10 @@ export const getCategoryBySlug = catchAync(async (req: Request, res: Response) =
     }
     res.json({category})
 })
+
+//[POST] "/api/categories/"
+export const createCategory = catchAync(async (req: Request, res: Response) => {
+    const body = req.body
+    const category = await CategoryService.createCategory(body)
+    res.status(201).json({category})
+})

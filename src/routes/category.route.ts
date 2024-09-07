@@ -1,7 +1,15 @@
 import { Router } from "express";
 const router: Router  = Router()
 import * as controller from "../controllers/category.controller"
-router.get("",controller.getCategories)
+
+import { uploadSingle } from "../middlewares/uploadCloud.middleware";
+import multer from "multer"
+const upload = multer()
+router
+    .route("")
+    .get(controller.getCategories)
+    .post(upload.single('thumbnail'),uploadSingle,controller.createCategory)
+
 router
     .route("/:id")
     .get(controller.getCategory) 
