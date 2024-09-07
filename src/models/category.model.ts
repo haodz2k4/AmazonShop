@@ -1,7 +1,7 @@
 import { ObjectId, Schema, model } from "mongoose";
 import { isURL } from "validator";
 
-interface ICategory {
+export interface ICategory {
     _id: ObjectId
     title: string
     thumbnail: string 
