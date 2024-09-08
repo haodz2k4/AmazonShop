@@ -2,12 +2,25 @@ import { Request, Response } from "express";
 import catchAync from "../utils/catchAync";
 import * as InventoryService from "../services/inventory.service"
 import pick, {transformObjectKeys} from "../utils/pick"
+import { buildRegExp } from "../utils/regExp";
 import paginateHelper from "../helpers/paginate.helper";
+import { ApiError } from "../utils/error";
 
 //[GET] "/api/inventories"
 export const getInventories = catchAync(async (req: Request, res: Response) => {
     const filterProducts: Record<string,any> = transformObjectKeys(pick(req.query,["product_status","product_highlighted"]))
     const filterSuppliers: Record<string,any> = transformObjectKeys(pick(req.query,["supplier_status"]))
+
+
+    //search 
+    const productKeyword = req.query.product_keyword as string 
+    const supplierKeyword = req.query.supplier_keyword as string 
+    if(productKeyword){
+        filterProducts.title = buildRegExp(productKeyword)
+    }
+    if(supplierKeyword){
+        filterProducts.name = buildRegExp(supplierKeyword)
+    }
 
     //Sorting 
     const sort: Record<string,1| -1> = {}
@@ -21,7 +34,7 @@ export const getInventories = catchAync(async (req: Request, res: Response) => {
     //Pagination 
     const page = parseInt(req.query.page as string) || 1
     const limit = parseInt(req.query.limit as string) || 30 
-    const totalDocument = await InventoryService.getTotalDocument()
+    const totalDocument = await InventoryService.getTotalDocument({filterProducts,filterSuppliers})
     const pagination = paginateHelper(page, limit, totalDocument)
     
     const inventories = await InventoryService.getAllInvetoryByQuery({filterProducts,filterSuppliers,sort,pagination});
@@ -35,3 +48,13 @@ export const createInventory = catchAync(async (req: Request, res: Response) => 
     res.status(201).json({message: "Created inventory successfully",inventory})
 })
 
+//[GET] "/api/inventories/:id"
+export const getInventory = catchAync(async (req: Request, res: Response) => {
+    const id = req.params.id 
+
+    const inventory = await InventoryService.getInventoryById(id)
+    if(!inventory){
+        throw new ApiError(404, "Inventory is not found")
+    }
+    res.json({inventory})
+})

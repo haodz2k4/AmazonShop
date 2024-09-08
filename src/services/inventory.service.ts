@@ -91,4 +91,8 @@ export const getTotalDocument = async (options?: Partial<InventoryOptions>) => {
 
 export const createInventory = async (bodyInventory: IIventory) => {
     return await Inventory.create(bodyInventory)
+} 
+
+export const getInventoryById = async (id: string) => {
+    return await Inventory.findOne({_id: id})
 }

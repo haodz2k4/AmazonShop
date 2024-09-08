@@ -6,4 +6,7 @@ router
     .get(controller.getInventories)
     .post(controller.createInventory)
 
+router
+    .route("/:id")
+    .get(controller.getInventory)
 export default router
