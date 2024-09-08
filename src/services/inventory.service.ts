@@ -1,21 +1,20 @@
 import Inventory from "../models/Inventory.model"
-
+import {transformToMatchMongo} from "../utils/pick"
 interface InventoryOptions {
     filterProducts: Record<string, any>,
     filterSuppliers: Record<string,any>,
-    sort: Record<string,'asc' | 'desc' | 1 | -1>
+    sort: Record<string, | 1 | -1>
 }
 
 export const getAllInvetoryByQuery = async (options: InventoryOptions) => {
 
-    console.log(options)
     return await Inventory.aggregate([
         {
             $lookup: {
                 from: "products",
                 localField: 'productId',
                 foreignField: '_id',
-                as: 'products'
+                as: 'product'
             }
             
         },
@@ -24,13 +23,18 @@ export const getAllInvetoryByQuery = async (options: InventoryOptions) => {
                 from: "suppliers",
                 localField: "supplierId",
                 foreignField: "_id",
-                as: 'suppliers'
+                as: 'supplier'
             }
         },
-        {$unwind: '$products'},
-        {$unwind: '$suppliers'},
+        {$unwind: '$product'},
+        {$unwind: '$supplier'},
         {
-            $match: {...options.filterProducts,...options.filterSuppliers}
+            $match: {
+                ...transformToMatchMongo('product',options.filterProducts),
+                ...transformToMatchMongo('supplier',options.filterSuppliers)}
+        },
+        {
+            $sort: options.sort
         }
         
     ])

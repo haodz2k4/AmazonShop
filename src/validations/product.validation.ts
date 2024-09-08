@@ -37,14 +37,14 @@ export const updateProducts = {
     body: Joi.object().keys({
         ids: Joi.array().required(),
         updates: {
-            title: Joi.string().min(2).max(200).required(),
+            title: Joi.string().min(2).max(200),
             categoryId: Joi.string().custom(Custom.validObjectId),
             description: Joi.string(),
             highlighted: Joi.string().valid('0','1'),
             position: Joi.number().integer(),
             thumbnail: Joi.string().uri(),
-            price: Joi.number().integer().required().min(0),
-            discountPercentage: Joi.number().integer().required().min(0).max(100), 
+            price: Joi.number().integer().min(0),
+            discountPercentage: Joi.number().integer().min(0).max(100), 
             status: Joi.string().valid('active','inactive')
         }
     })
@@ -67,14 +67,14 @@ export const updateProduct = {
         id: Joi.string().custom(Custom.validObjectId)
     }),
     body: Joi.object().keys({
-        title: Joi.string().min(2).max(200).required(),
+        title: Joi.string().min(2).max(200),
         categoryId: Joi.string().custom(Custom.validObjectId),
         description: Joi.string(),
         highlighted: Joi.string().valid('0','1'),
         position: Joi.number().integer(),
         thumbnail: Joi.string().uri(),
-        price: Joi.number().integer().required().min(0),
-        discountPercentage: Joi.number().integer().required().min(0).max(100), 
+        price: Joi.number().integer().min(0),
+        discountPercentage: Joi.number().integer().min(0).max(100), 
         status: Joi.string().valid('active','inactive')
     })
 }
