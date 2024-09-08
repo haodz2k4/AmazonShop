@@ -7,6 +7,7 @@ import { getCategoryBySlug } from "../services/category.service"
 import paginate from "../helpers/paginate.helper"
 import { buildRegExp } from "../utils/regExp"
 import { ApiError } from "../utils/error"
+import { getTotalQuantityByProductId } from "../services/inventory.service"
 
 //[GET] "/api/products"
 export const getProducts = catchAsync(async (req: Request, res: Response) => {
@@ -57,6 +58,9 @@ export const getProducts = catchAsync(async (req: Request, res: Response) => {
         selectFields: only
     })
 
+    await Promise.all(products.map(async (item) => {
+        item.quantity = await getTotalQuantityByProductId(item._id.toString())
+    }))
     res.status(200).json({products, pagination})
 
 }) 

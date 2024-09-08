@@ -15,6 +15,7 @@ export interface IProduct {
     deleted: boolean,
     slug: string,
     status: string
+    quantity?: number //this quantity is stock 
 
 
 }

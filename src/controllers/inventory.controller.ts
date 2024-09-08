@@ -19,7 +19,7 @@ export const getInventories = catchAync(async (req: Request, res: Response) => {
         filterProducts.title = buildRegExp(productKeyword)
     }
     if(supplierKeyword){
-        filterProducts.name = buildRegExp(supplierKeyword)
+        filterSuppliers.name = buildRegExp(supplierKeyword)
     }
 
     //Sorting 
@@ -37,7 +37,9 @@ export const getInventories = catchAync(async (req: Request, res: Response) => {
     const totalDocument = await InventoryService.getTotalDocument({filterProducts,filterSuppliers})
     const pagination = paginateHelper(page, limit, totalDocument)
     
-    const inventories = await InventoryService.getAllInvetoryByQuery({filterProducts,filterSuppliers,sort,pagination});
+    //SelectField \
+    const selectField = req.query.only as string || ""
+    const inventories = await InventoryService.getAllInvetoryByQuery({filterProducts,filterSuppliers,sort,pagination, selectField});
     res.json({inventories, pagination})
 }) 
 

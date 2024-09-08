@@ -2,15 +2,22 @@ import { PaginationResult } from "../helpers/paginate.helper"
 import Inventory,{IIventory} from "../models/Inventory.model"
 import {transformToMatchMongo} from "../utils/pick"
 interface InventoryOptions {
-    filterProducts: Record<string, any>,
-    filterSuppliers: Record<string,any>,
+    filterProducts: Record<string, any>
+    filterSuppliers: Record<string,any>
     pagination: PaginationResult
     sort: Record<string, | 1 | -1>
+    selectField: string 
 }
 
 export const getAllInvetoryByQuery = async (options: InventoryOptions) => {
 
-    return await Inventory.aggregate([
+
+    const selectFields = options.selectField.split(" ").reduce((result, item) => {
+        result[item] = 1
+        return result
+    }, {} as any) 
+
+    const pipeline: any = [
         {
             $lookup: {
                 from: "products",
@@ -38,8 +45,14 @@ export const getAllInvetoryByQuery = async (options: InventoryOptions) => {
         {
             $sort: options.sort
         },
-        {$limit: options.pagination.limit},{$skip: options.pagination.skip}
+        {$limit: options.pagination.limit },{$skip: options.pagination.skip}
         
+    ]
+    if(options.selectField){
+        pipeline.push({$project: selectFields})
+    }
+    return await Inventory.aggregate([
+        ...pipeline,
     ])
 }
 
@@ -88,6 +101,15 @@ export const getTotalDocument = async (options?: Partial<InventoryOptions>) => {
 
     return result.length > 0 ? result[0].totalDocuments : 0;
 };
+
+export const getTotalQuantityByProductId = async (productId: string) => {
+    
+    const inventories = await Inventory.find({productId: productId}).select("quantity") 
+    return inventories.reduce((result, item) => {
+        result += item.quantity
+        return result
+    }, 0)
+}
 
 export const createInventory = async (bodyInventory: IIventory) => {
     return await Inventory.create(bodyInventory)
