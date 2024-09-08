@@ -26,4 +26,12 @@ export const getInventories = catchAync(async (req: Request, res: Response) => {
     
     const inventories = await InventoryService.getAllInvetoryByQuery({filterProducts,filterSuppliers,sort,pagination});
     res.json({inventories, pagination})
+}) 
+
+//[POST] "/api/inventories/"
+export const createInventory = catchAync(async (req: Request, res: Response) => {
+    const body = req.body 
+    const inventory = await InventoryService.createInventory(body)
+    res.status(201).json({message: "Created inventory successfully",inventory})
 })
+

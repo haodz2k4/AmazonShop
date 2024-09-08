@@ -1,5 +1,5 @@
 import { PaginationResult } from "../helpers/paginate.helper"
-import Inventory from "../models/Inventory.model"
+import Inventory,{IIventory} from "../models/Inventory.model"
 import {transformToMatchMongo} from "../utils/pick"
 interface InventoryOptions {
     filterProducts: Record<string, any>,
@@ -88,3 +88,7 @@ export const getTotalDocument = async (options?: Partial<InventoryOptions>) => {
 
     return result.length > 0 ? result[0].totalDocuments : 0;
 };
+
+export const createInventory = async (bodyInventory: IIventory) => {
+    return await Inventory.create(bodyInventory)
+}

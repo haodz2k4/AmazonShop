@@ -1,6 +1,6 @@
 import {ObjectId, Schema, model} from "mongoose"
 
-interface IIventory {
+export interface IIventory {
     productId: ObjectId,
     supplierId: ObjectId,
     quantity: number,
