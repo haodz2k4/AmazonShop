@@ -1,8 +1,10 @@
+import { PaginationResult } from "../helpers/paginate.helper"
 import Inventory from "../models/Inventory.model"
 import {transformToMatchMongo} from "../utils/pick"
 interface InventoryOptions {
     filterProducts: Record<string, any>,
     filterSuppliers: Record<string,any>,
+    pagination: PaginationResult
     sort: Record<string, | 1 | -1>
 }
 
@@ -35,7 +37,54 @@ export const getAllInvetoryByQuery = async (options: InventoryOptions) => {
         },
         {
             $sort: options.sort
-        }
+        },
+        {$limit: options.pagination.limit},{$skip: options.pagination.skip}
         
     ])
 }
+
+export const getTotalDocument = async (options?: Partial<InventoryOptions>) => {
+    const pipeline: any[] = [
+        {
+            $lookup: {
+                from: "products",
+                localField: 'productId',
+                foreignField: '_id',
+                as: 'product'
+            }
+        },
+        {
+            $lookup: {
+                from: "suppliers",
+                localField: "supplierId",
+                foreignField: "_id",
+                as: 'supplier'
+            }
+        },
+        { $unwind: '$product' },
+        { $unwind: '$supplier' }
+    ];
+
+    if (options?.filterProducts) {
+        pipeline.push({
+            $match: {
+                ...transformToMatchMongo('product', options.filterProducts)
+            }
+        });
+    }
+
+    if (options?.filterSuppliers) {
+        pipeline.push({
+            $match: {
+                ...transformToMatchMongo('supplier', options.filterSuppliers)
+            }
+        });
+    }
+
+    const result = await Inventory.aggregate([
+        ...pipeline,
+        { $count: "totalDocuments" }
+    ]);
+
+    return result.length > 0 ? result[0].totalDocuments : 0;
+};
