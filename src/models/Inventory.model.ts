@@ -1,6 +1,6 @@
 import {ObjectId, Schema, model} from "mongoose"
 
-import toJSONPlugin from "./plugin/toJSON.plugin"
+import toJSONPlugin from "./plugins/toJSON.plugin"
 export interface IIventory {
     productId: ObjectId,
     supplierId: ObjectId,

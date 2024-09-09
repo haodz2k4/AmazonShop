@@ -1,6 +1,6 @@
 import { ObjectId, Schema, model } from "mongoose";
 import { isURL } from "validator";
-import toJSONPlugin from "./plugin/toJSON.plugin";
+import toJSONPlugin from "./plugins/toJSON.plugin";
 export interface ICategory {
     _id: ObjectId
     title: string

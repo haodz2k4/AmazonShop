@@ -2,7 +2,7 @@ import {Model, ObjectId, Schema, model, plugin, Document} from "mongoose"
 import { isURL } from "validator"
 import { createUniqueSlug } from "../helpers/slug.helper"
 
-import toJSONPlugin from "./plugin/toJSON.plugin"
+import toJSONPlugin from "./plugins/toJSON.plugin"
 export interface IProduct extends Document{
     id: string 
     title: string

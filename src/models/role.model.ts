@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import toJSONPlugin from "./plugin/toJSON.plugin";
+import toJSONPlugin from "./plugins/toJSON.plugin";
 
 interface IRole {
     title: string

@@ -1,6 +1,6 @@
 import { ObjectId, Schema,model } from "mongoose";
 import { isEmail, isMobilePhone } from "validator";
-import toJSONPlugin from "./plugin/toJSON.plugin";
+import toJSONPlugin from "./plugins/toJSON.plugin";
 export interface ISupplier {
     _id: ObjectId,
     name: string,
