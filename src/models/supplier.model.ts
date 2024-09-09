@@ -1,7 +1,7 @@
 import { ObjectId, Schema,model } from "mongoose";
 import { isEmail, isURL } from "validator";
 import toJSONPlugin from "./plugin/toJSON.plugin";
-interface ISupplier {
+export interface ISupplier {
     _id: ObjectId,
     name: string,
     contactInfo: {
@@ -33,8 +33,7 @@ const supplierSchema = new Schema<ISupplier>({
                 },
                 message: "Invalid phone number"
             }
-        },
-        address: {type: String, required: true}
+        }
     },
     deleted: {type: Boolean, default: false},
     status: {type: String, enum: ["active","inactive"],default: "active"}

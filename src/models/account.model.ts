@@ -41,8 +41,17 @@ const accountSchema = new Schema<IAccount>({
     password: {
         type: String, 
         required: true,
-        len: 8,
-        private: true
+        minlength: 8,
+        private: true,
+        validate: {
+            validator: function(value: string) {
+                if(!value.match(/\d/) || !value.match(/[a-zA-Z]/)){
+                    return false 
+                }
+                return true
+            },
+            message: 'Password must contain at least one letter and one numbe'
+        }
     },
     phone: {
         type: String, 
@@ -54,7 +63,18 @@ const accountSchema = new Schema<IAccount>({
             message: 'phone is not valid'
         }
     },
-    roleId: {type: Schema.Types.ObjectId, required: true, ref: 'role'},
+    roleId: {
+        type: Schema.Types.ObjectId, 
+        required: true, 
+        ref: 'role',
+        validate: {
+            validator: async function(val: string) {
+                const role = await model('role').findOne({_id: val},{deleted: false})
+                return !!role
+            },
+            message: "Role is not exists"
+        }
+    },
     birthDate: Date,
     deleted: {
         type: Boolean,

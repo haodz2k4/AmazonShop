@@ -56,4 +56,5 @@ export const deleteAccount = catchAync(async (req: Request, res: Response) => {
     const {id} = req.params 
     const account = await AccountService.updateAccountById(id,{deleted: true})
     res.status(200).json({account})
-})
+}) 
+
