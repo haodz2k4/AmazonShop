@@ -9,5 +9,7 @@ router
 router
     .route("/:id")
     .get(controller.getSupplier)
+    .patch(controller.updateSupplier)
 
+router.patch("/:id/delete",controller.deleteSupplier)
 export default router 

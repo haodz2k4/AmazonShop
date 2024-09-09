@@ -1,5 +1,5 @@
 import { ObjectId, Schema,model } from "mongoose";
-import { isEmail, isURL } from "validator";
+import { isEmail, isMobilePhone } from "validator";
 import toJSONPlugin from "./plugin/toJSON.plugin";
 export interface ISupplier {
     _id: ObjectId,
@@ -30,7 +30,7 @@ const supplierSchema = new Schema<ISupplier>({
             required: true,
             validate: {
                 validator: function(value: string) {
-                    return isURL(value)
+                    return isMobilePhone(value)
                 },
                 message: "Invalid phone number"
             }

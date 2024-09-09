@@ -39,6 +39,20 @@ export const getSupplier = catchAync(async (req: Request, res: Response) => {
 export const createSupplier = catchAync(async (req: Request, res: Response) => {
     const body = req.body 
     const supplier = await SupplierService.createSupplier(body)
-    res.status(201).json({supplier})
+    res.status(201).json({message: "created supplier",supplier})
 })
 
+//[PATCH] "/api/suppliers/:id"
+export const updateSupplier = catchAync(async (req: Request, res: Response) => {
+    const {id} = req.params 
+    const body = req.body 
+    const supplier = await SupplierService.updateSupplierById(id, body)
+    res.status(200).json({message: "updated supplier",supplier})
+})
+
+//[PATCH] "/api/suppliers/:id/delete"
+export const deleteSupplier = catchAync(async (req: Request, res: Response) => {
+    const {id} = req.params 
+    const supplier = await SupplierService.updateSupplierById(id, {deleted: true})
+    res.status(200).json({message: "deleted supplier", supplier})
+})
