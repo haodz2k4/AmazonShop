@@ -8,7 +8,7 @@ export interface IAccount {
     email: string
     password: string
     phone: string
-    role_id: Schema.Types.ObjectId
+    roleId: Schema.Types.ObjectId
     birthDate: Date
     deleted: boolean
     status: string 
@@ -53,7 +53,7 @@ const accountSchema = new Schema<IAccount>({
             message: 'phone is not valid'
         }
     },
-    role_id: {type: Schema.Types.ObjectId, required: true, ref: 'role'},
+    roleId: {type: Schema.Types.ObjectId, required: true, ref: 'role'},
     birthDate: Date,
     deleted: {
         type: Boolean,

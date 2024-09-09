@@ -1,6 +1,14 @@
 import { Schema, model } from "mongoose";
 
-const roleSchema = new Schema({
+
+interface IRole {
+    title: string
+    description: string 
+    permissions: string[],
+    deleted: boolean
+}
+
+const roleSchema = new Schema<IRole>({
     title: {type: String ,required: true},
     description: String,
     permissions: {
@@ -13,4 +21,4 @@ const roleSchema = new Schema({
     }
 },{timestamps: true}) 
 
-export default model('role',roleSchema)
+export default model<IRole>('role',roleSchema)
