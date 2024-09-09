@@ -1,11 +1,8 @@
 import { Schema } from 'mongoose';
 
-// Tạo một interface để xác định kiểu của tùy chọn plugin nếu cần
 interface ToJSONOptions {
   transform?: (doc: any, ret: any) => void;
 }
-
-// Plugin function cho schema
 function toJSONPlugin(schema: Schema) {
   schema.set('toJSON', {
     transform: function (doc, ret) {
