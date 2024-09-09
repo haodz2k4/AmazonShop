@@ -33,4 +33,12 @@ export const getSupplier = catchAync(async (req: Request, res: Response) => {
         throw new ApiError(404,"Supplier is not found")
     }
     res.json({supplier})
+}) 
+
+//[POST] "/api/suppliers"
+export const createSupplier = catchAync(async (req: Request, res: Response) => {
+    const body = req.body 
+    const supplier = await SupplierService.createSupplier(body)
+    res.status(201).json({supplier})
 })
+

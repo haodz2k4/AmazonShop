@@ -18,6 +18,7 @@ const supplierSchema = new Schema<ISupplier>({
         email: {
             type: String, 
             required: true, 
+            unique: true,
             validate: {
                 validator: function(value: string) {
                     return isEmail(value)
