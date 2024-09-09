@@ -1,5 +1,5 @@
 import { Schema,model, plugin } from "mongoose";
-import {isURL, isEmail} from 'validator'
+import {isURL, isEmail, isMobilePhone} from 'validator'
 import toJSONPlugin from "./plugins/toJSON.plugin";
 export interface IAccount {
     fullName: string
@@ -37,8 +37,22 @@ const accountSchema = new Schema<IAccount>({
             message: "Invalid email"
         }
     },
-    password: {type: String, required: true},
-    phone: {type: String, required: true},
+    password: {
+        type: String, 
+        required: true,
+        len: 8,
+        private: true
+    },
+    phone: {
+        type: String, 
+        required: true,
+        validate: {
+            validator: function(val: string) {
+                return isMobilePhone(val)
+            },
+            message: 'phone is not valid'
+        }
+    },
     role_id: {type: Schema.Types.ObjectId, required: true, ref: 'role'},
     birthDate: Date,
     deleted: {
