@@ -9,7 +9,7 @@ export const validObjectId = (value: any, helper: CustomHelpers) => {
     return value
 }
 
-export const isValidSlug = (value: any, helper: CustomHelpers) => {
+export const ValidSlug = (value: any, helper: CustomHelpers) => {
     const initSlug = slugify(value,{lower: true, strict: true})
     if(initSlug !== value){
         return helper.error('any.invalid',{message: `${value} is invalid slug`})

@@ -15,7 +15,7 @@ export const getProducts = {
         sortKey: Joi.string(),
         sortValue: Joi.string().valid('sortKey','sortValue'),
         only: Joi.string(),
-        slug: Joi.string().custom(Custom.isValidSlug)
+        slug: Joi.string().custom(Custom.ValidSlug)
     })
 }
 
@@ -58,7 +58,7 @@ export const getProduct = {
 
 export const getProductBySlug = {
     params: Joi.object().keys({
-        slug: Joi.string().custom(Custom.isValidSlug)
+        slug: Joi.string().custom(Custom.ValidSlug)
     })
 }
 
