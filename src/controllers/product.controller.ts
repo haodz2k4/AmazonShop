@@ -60,7 +60,7 @@ export const getProducts = catchAsync(async (req: Request, res: Response) => {
 
     const productsWithQuantity = await Promise.all(products.map(async (item) => {
         const quantity = await getTotalQuantityByProductId(item.id);
-        const jsonProduct = item.toJSON();
+        const jsonProduct = item.toJSON({virtuals: true});
         jsonProduct.quantity = quantity;
         return jsonProduct;
     }));

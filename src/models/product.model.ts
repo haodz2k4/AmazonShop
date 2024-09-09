@@ -61,6 +61,10 @@ const productSchema = new Schema<IProduct>({
     timestamps: true
 })
 productSchema.plugin(toJSONPlugin);
+productSchema.virtual('discountedPrice').get(function() {
+    return this.price * (100 - this.discountPercentage)/100
+})
+
 
 const collectionName = 'product'
 
