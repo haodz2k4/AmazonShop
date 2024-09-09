@@ -1,6 +1,6 @@
 import { ObjectId, Schema, model } from "mongoose";
 import { isURL } from "validator";
-
+import toJSONPlugin from "./plugin/toJSON.plugin";
 export interface ICategory {
     _id: ObjectId
     title: string
@@ -35,5 +35,5 @@ const categorySchema = new Schema<ICategory>({
     parentCategory: Schema.Types.ObjectId,
    
 },{timestamps: true})
-
+categorySchema.plugin(toJSONPlugin)
 export default model<ICategory>("category",categorySchema)

@@ -1,7 +1,7 @@
 import {Model, ObjectId, Schema, model} from "mongoose"
 import { isURL } from "validator"
 import { createUniqueSlug } from "../helpers/slug.helper"
-
+import toJSONPlugin from "./plugin/toJSON.plugin"
 export interface IProduct {
     _id: ObjectId
     title: string
@@ -61,6 +61,9 @@ const productSchema = new Schema<IProduct>({
 },{
     timestamps: true
 })
+
+//Plugin
+productSchema.plugin(toJSONPlugin)
 const collectionName = 'product'
 
 productSchema.pre('save', async function(next) {

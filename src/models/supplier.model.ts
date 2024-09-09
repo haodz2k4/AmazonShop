@@ -1,5 +1,6 @@
 import { ObjectId, Schema,model } from "mongoose";
 import { isEmail, isURL } from "validator";
+import toJSONPlugin from "./plugin/toJSON.plugin";
 interface ISupplier {
     _id: ObjectId,
     name: string,
@@ -38,5 +39,5 @@ const supplierSchema = new Schema<ISupplier>({
     deleted: {type: Boolean, default: false},
     status: {type: String, enum: ["active","inactive"],default: "active"}
 })
-
+supplierSchema.plugin(toJSONPlugin)
 export default model('supplier',supplierSchema)

@@ -1,5 +1,5 @@
 import {ObjectId, Schema, model} from "mongoose"
-
+import toJSONPlugin from "./plugin/toJSON.plugin"
 export interface IIventory {
     productId: ObjectId,
     supplierId: ObjectId,
@@ -37,5 +37,7 @@ const inventorySchema = new Schema<IIventory>({
     wareHouse: {type: String, required: true}
 
 })
+
+inventorySchema.plugin(toJSONPlugin)
 
 export default model<IIventory>('inventory',inventorySchema)
