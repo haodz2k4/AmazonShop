@@ -1,5 +1,6 @@
 import { PaginationResult } from "../helpers/paginate.helper"
 import Inventory,{IIventory} from "../models/Inventory.model"
+import { ApiError } from "../utils/error"
 import {transformToMatchMongo} from "../utils/pick"
 interface InventoryOptions {
     filterProducts: Record<string, any>
@@ -116,5 +117,16 @@ export const createInventory = async (bodyInventory: IIventory) => {
 } 
 
 export const getInventoryById = async (id: string) => {
-    return await Inventory.findOne({_id: id})
+    return await Inventory.findById(id)
+}
+
+export const updateInventoryById = async (id: string, bodyInventory: Partial<IIventory>) => {
+    return await Inventory.findByIdAndUpdate(id,bodyInventory);
+}
+
+export const deleteInventoryById = async (id: string) => {
+    const inventory = await Inventory.findByIdAndDelete(id) 
+    if(!inventory){
+        throw new ApiError(404,"Inventory is not found")
+    }
 }

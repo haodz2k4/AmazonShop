@@ -9,4 +9,6 @@ router
 router
     .route("/:id")
     .get(controller.getInventory)
+    .patch(controller.updateInventory)
+    .delete(controller.deleteInventory)
 export default router

@@ -59,4 +59,22 @@ export const getInventory = catchAync(async (req: Request, res: Response) => {
         throw new ApiError(404, "Inventory is not found")
     }
     res.json({inventory})
+}) 
+
+//[PATCH] "/api/inventories/:id"
+export const updateInventory = catchAync(async (req: Request, res: Response) => {
+    const {id} = req.params 
+    const body = req.body
+    const inventory = await InventoryService.updateInventoryById(id,body);
+    if(!inventory){
+        throw new ApiError(400,"Inventory is not found")
+    }
+    res.status(200).json({message: "updated inventory successfully", inventory})
+}) 
+
+//[DELETE] "/api/inventories/:id"
+export const deleteInventory = catchAync(async (req: Request, res: Response) => {
+    const {id} = req.params 
+    await InventoryService.deleteInventoryById(id)
+    res.status(204) 
 })
