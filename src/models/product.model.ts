@@ -1,9 +1,9 @@
-import {Model, ObjectId, Schema, model} from "mongoose"
+import {Model, ObjectId, Schema, model, plugin, Document} from "mongoose"
 import { isURL } from "validator"
 import { createUniqueSlug } from "../helpers/slug.helper"
-
+import toJSONPlugin from "./plugins/toJSON.plugin"
 export interface IProduct {
-    _id: ObjectId
+    id: string 
     title: string
     categoryId: ObjectId
     description: string
@@ -12,11 +12,10 @@ export interface IProduct {
     thumbnail: string 
     price: number
     discountPercentage: number 
-    deleted: boolean,
-    slug: string,
+    deleted: boolean
+    slug: string
     status: string
-    quantity?: number //this quantity is stock 
-
+    quantity?: number
 
 }
 
@@ -61,6 +60,8 @@ const productSchema = new Schema<IProduct>({
 },{
     timestamps: true
 })
+productSchema.plugin(toJSONPlugin);
+
 const collectionName = 'product'
 
 productSchema.pre('save', async function(next) {
