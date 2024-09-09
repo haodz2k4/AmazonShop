@@ -6,5 +6,9 @@ router
     .route("")
     .get(controller.getAccounts)
 
+router
+    .route("/:id")
+    .get(controller.getAccount)
+    .patch(controller.updateAccount)
 
 export default router

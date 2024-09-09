@@ -23,3 +23,19 @@ export const getAccounts = catchAync(async (req: Request, res: Response) => {
     const accounts = await AccountService.getAllAccountByQuery({filter,pagination, sort, selectFields})
     res.json({accounts, pagination})
 })
+
+//[GET] "/api/accounts/:id"
+export const getAccount = catchAync(async (req: Request, res: Response) => {
+    const {id} = req.params 
+    const account = await AccountService.getAccountById(id)
+    res.status(200).json({account})
+})
+
+//[PATCH] "/api/account/:id"
+export const updateAccount = catchAync(async (req: Request, res: Response) => {
+    const {id} = req.params 
+    const body = req.body
+    const account = await AccountService.updateAccountById(id,body)
+    res.status(200).json({account})
+})
+

@@ -1,5 +1,6 @@
 import { Schema,model, plugin } from "mongoose";
 import {isURL, isEmail, isMobilePhone} from 'validator'
+import {hash, compare} from "bcrypt"
 import toJSONPlugin from "./plugins/toJSON.plugin";
 export interface IAccount {
     fullName: string
@@ -66,6 +67,13 @@ const accountSchema = new Schema<IAccount>({
     }
 },{timestamps: true}) 
 
+
+accountSchema.pre('save',async function(next) {
+    if(this.isModified('password')) {
+        this.password = await hash(this.password,8)
+    } 
+    next()
+})
 
 export default model('account',accountSchema)
 
