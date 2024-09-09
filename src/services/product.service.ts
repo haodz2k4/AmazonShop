@@ -20,10 +20,6 @@ export const getAllProductsByQuery = async (option: ProductsOption) => {
         .limit(option.pagination.limit)
         .skip(option.pagination.skip)
         .select(option.selectFields || "")
-<<<<<<< HEAD
-=======
-        
->>>>>>> 3f5b45e55e29cfc6e6d85568b4a633a447a9e5c5
 }
 
 export const getTotalDocument = async (query?: Partial<Record<keyof IProduct, any>>): Promise<number> => {

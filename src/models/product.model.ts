@@ -3,7 +3,7 @@ import { isURL } from "validator"
 import { createUniqueSlug } from "../helpers/slug.helper"
 
 import toJSONPlugin from "./plugin/toJSON.plugin"
-interface IProduct {
+export interface IProduct extends Document{
     id: string 
     title: string
     categoryId: ObjectId
