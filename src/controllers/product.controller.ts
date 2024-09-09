@@ -58,10 +58,13 @@ export const getProducts = catchAsync(async (req: Request, res: Response) => {
         selectFields: only
     })
 
-    await Promise.all(products.map(async (item) => {
-        item.quantity = await getTotalQuantityByProductId(item._id.toString())
-    }))
-    res.status(200).json({products, pagination})
+    const productsWithQuantity = await Promise.all(products.map(async (item) => {
+        const quantity = await getTotalQuantityByProductId(item.id);
+        const jsonProduct = item.toJSON({virtuals: true});
+        jsonProduct.quantity = quantity;
+        return jsonProduct;
+    }));
+    res.status(200).json({products: productsWithQuantity, pagination})
 
 }) 
 
