@@ -4,6 +4,7 @@ import categoryRouter from "./category.route"
 import inventoryRouter from "./inventory.router"
 import accountRouter from "./account.router"
 import supplierRouter from "./supplier.router"
+import roleRouter from "./role.router"
 const path = '/api'
 export default (app: Express) => {
 
@@ -12,4 +13,5 @@ export default (app: Express) => {
     app.use(`${path}/inventories`,inventoryRouter)
     app.use(`${path}/accounts`,accountRouter)
     app.use(`${path}/suppliers`,supplierRouter)
+    app.use(`${path}/roles`,roleRouter)
 }

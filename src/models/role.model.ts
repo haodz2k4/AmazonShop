@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
 import toJSONPlugin from "./plugins/toJSON.plugin";
 
-interface IRole {
+export interface IRole {
     title: string
     description: string 
     permissions: string[],
