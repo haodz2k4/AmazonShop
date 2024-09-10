@@ -24,3 +24,28 @@ export const getRoles = catchAync(async (req: Request, res: Response) => {
 
     res.json({roles})
 })
+
+//[POST] "/api/roles"   
+export const createRole = catchAync(async (req: Request, res: Response) => {
+    
+    const body = req.body 
+    const role = await RoleService.createRole(body)
+
+    res.status(201).json({message: "Created role successfully", role})
+}) 
+
+//[PATCH] "/api/roles/:id"
+export const updateRole = catchAync(async (req: Request, res: Response) => {
+    const {id} = req.params 
+    const body = req.body 
+    const role = await RoleService.updateRoleById(id, body)
+
+    res.status(200).json({message: "Update role successfully", role})
+})
+
+//[PATCH] "/api/roles/:id/delete"
+export const deleteRole = catchAync(async (req: Request, res: Response) => {
+    const {id} = req.params 
+    await RoleService.updateRoleById(id, {deleted: true})
+    res.status(200).json({message: "deleted role successfully"}) 
+})
