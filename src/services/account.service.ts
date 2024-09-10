@@ -32,11 +32,23 @@ export const createAccount = async (bodyAccount: IAccount) => {
     return await Account.create(bodyAccount)
 }
 
+const getAccountByEmail = async (email: string) => {
+    return await Account.findOne({email, deleted: false})
+}
+
 export const updateAccountById = async (id: string, bodyAccount: Partial<IAccount>) => {
     const account = await getAccountById(id)
     if(!account){
         throw new ApiError(404,"Account is not found")
     }
     Object.assign(account, bodyAccount)
+    return account
+}
+
+export const loginWithEmailAndPassword = async (email: string, password: string) => {
+    const account = await getAccountByEmail(email)
+    if(!account || !account.isPasswordMatch(password)){
+        throw new ApiError(401, "Incorrect email or password")
+    }
     return account
 }

@@ -15,7 +15,10 @@ export interface IAccount {
     status: string 
 }
 
-const accountSchema = new Schema<IAccount>({
+interface IAccountMethod  {
+    isPasswordMatch(password: string) :Promise<boolean>
+}
+const accountSchema = new Schema<IAccount, {}, IAccountMethod>({
     fullName: {type: String, required: true, min: 3, max: 20},
     description: String,
     avatar: {
@@ -94,6 +97,9 @@ accountSchema.pre('save',async function(next) {
     } 
     next()
 })
+accountSchema.methods.isPasswordMatch = function (password: string): Promise<boolean> {
+    return compare(password, this.password)
+}
 
 export default model('account',accountSchema)
 

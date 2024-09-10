@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import catchAync from "../utils/catchAync";
 import * as AccountService from "../services/account.service"
+import * as TokenService from "../services/token.service"
 import paginateHelper from "../helpers/paginate.helper";
 import pick from "../utils/pick";
 import { ApiError } from "../utils/error";
@@ -9,7 +10,7 @@ export const getAccounts = catchAync(async (req: Request, res: Response) => {
 
     const filter = pick(req.query,["status","roleId"])
 
-    const page = parseInt(req.query.page as string) || 1
+    const page = parseInt(req.query.page as string) || 1  
     const limit = parseInt(req.query.limit as string) || 10
     const totalDocument = await AccountService.getTotalDocument(filter)
     const pagination = paginateHelper(page, limit,totalDocument)
@@ -58,3 +59,12 @@ export const deleteAccount = catchAync(async (req: Request, res: Response) => {
     res.status(200).json({account})
 }) 
 
+//[POST] "/api/accounts/login"
+export const loginAccount = catchAync(async (req: Request, res: Response) => {
+    const {email, password} = req.body 
+
+    const account = await AccountService.loginWithEmailAndPassword(email, password) 
+    const token = await TokenService.generateAuthAdminToken(account.id)
+
+    res.status(200).json({message: "login successfully",account, ...token})
+})
