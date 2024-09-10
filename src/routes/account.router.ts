@@ -8,13 +8,14 @@ router
     .route("")
     .get(controller.getAccounts)
     .post(upload.single('avatar'),uploadSingle,controller.createAccount)
-
+router.get("/logout",controller.logout)
 router
     .route("/:id")
     .get(controller.getAccount)
     .patch(upload.single('avatar'),uploadSingle,controller.updateAccount)
 router.patch("/:id/delete",controller.deleteAccount)
 router.post("/login",controller.loginAccount)
-router.post("/refresh-token",controller.refreshToken)
+router.post("/refresh-token",controller.refreshToken) 
+
 
 export default router

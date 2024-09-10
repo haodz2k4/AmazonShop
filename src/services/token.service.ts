@@ -19,13 +19,13 @@ export const generateToken = (
 
 
 export const generateAuthAdminToken = async (accountId: string) => {
-    const role = 'admin'
+    const role = 'admin'    
     const accessToken = generateToken(accountId,role,config.jwt.accessExpires as string) 
 
     const refreshToken = generateToken(accountId,role,config.jwt.refreshExpires as string) 
 
     const ttlInSecond = ms(config.jwt.refreshExpires as string) / 1000
-    await CacheService.setCache(`${role}:${accountId}`,ttlInSecond,refreshToken)
+    await CacheService.setCache(`refreshToken:${role}:${accountId}`,ttlInSecond,refreshToken)
 
     
     return {
@@ -38,4 +38,13 @@ export const generateAuthAdminToken = async (accountId: string) => {
 
 export const verifyToken = (token: string, secretKey: string = config.jwt.secret as string) => {
     return jwt.verify(token, secretKey)
+}
+
+export const addTokenToBlacklist = async (token: string, expireTime: string | number) => {
+    const cacheKey = `blacklist_${token}`
+    await CacheService.setCache(cacheKey,expireTime,'blacklisted')
+}
+
+export const decodeToken = (token: string) => {
+    return jwt.decode(token)
 }

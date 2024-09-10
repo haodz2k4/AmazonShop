@@ -7,7 +7,11 @@ import * as CacheService from "../services/cache.service"
 import paginateHelper from "../helpers/paginate.helper";
 import pick from "../utils/pick";
 import { ApiError } from "../utils/error";
+import ms from "ms";
 import { JwtPayload } from "jsonwebtoken";
+import moment from "moment"
+
+
 //[GET] "/api/accounts"
 export const getAccounts = catchAync(async (req: Request, res: Response) => {
 
@@ -79,13 +83,38 @@ export const refreshToken = catchAync(async (req: Request, res: Response) => {
     if(!refreshToken){
         throw new ApiError(401,"Refresh token is required")
     }
+    //decoded refresh token 
     const decoded = TokenService.verifyToken(refreshToken) as JwtPayload;
     const cacheKey = `${decoded?.role}:${decoded.id}`
+    //get refreshtoken from redis
     const cacheData = await CacheService.getCache(cacheKey)
+    //check refreshtoken and check cache data not equals with refreshtoken
     if(!cacheData || cacheData !== refreshToken){
         throw new ApiError(403, "Invalid refresh token")
     }
 
     const newToken = await TokenService.generateAuthAdminToken(decoded.id)
     res.status(200).json({message: "Refresh token successfully", ...newToken})
+})
+
+//[GET] "/api/accounts/logout"
+export const logout = catchAync(async (req: Request, res: Response) => {
+
+    //RefreshToken 
+    const refreshToken = req.cookies.refreshToken 
+    await CacheService.deleteCache(refreshToken)
+    //Access Token 
+    if(!req.headers.authorization){
+        throw new ApiError(401,"Access token is required")
+    }
+    const accessToken = req.headers.authorization.split(" ")[1]  
+    
+    //decoded token to get exp time
+    const decoded = TokenService.decodeToken(accessToken) as JwtPayload 
+    //Add token to blacklist
+    const ttl = decoded.exp as number - Math.floor(Date.now() / 1000)
+    await TokenService.addTokenToBlacklist(accessToken,ttl) 
+
+    res.status(200).json({message: "Logout successfully"})
+
 })
