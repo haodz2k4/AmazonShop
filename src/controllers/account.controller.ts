@@ -1,10 +1,13 @@
+
 import { Request, Response } from "express";
 import catchAync from "../utils/catchAync";
 import * as AccountService from "../services/account.service"
 import * as TokenService from "../services/token.service"
+import * as CacheService from "../services/cache.service"
 import paginateHelper from "../helpers/paginate.helper";
 import pick from "../utils/pick";
 import { ApiError } from "../utils/error";
+import { JwtPayload } from "jsonwebtoken";
 //[GET] "/api/accounts"
 export const getAccounts = catchAync(async (req: Request, res: Response) => {
 
@@ -67,4 +70,22 @@ export const loginAccount = catchAync(async (req: Request, res: Response) => {
     const token = await TokenService.generateAuthAdminToken(account.id)
 
     res.status(200).json({message: "login successfully",account, ...token})
+}) 
+
+//[POST] "/api/accounts/refresh-token"
+export const refreshToken = catchAync(async (req: Request, res: Response) => {
+    const refreshToken = req.cookies.refreshToken 
+    
+    if(!refreshToken){
+        throw new ApiError(401,"Refresh token is required")
+    }
+    const decoded = TokenService.verifyToken(refreshToken) as JwtPayload;
+    const cacheKey = `${decoded?.role}:${decoded.id}`
+    const cacheData = await CacheService.getCache(cacheKey)
+    if(!cacheData || cacheData !== refreshToken){
+        throw new ApiError(403, "Invalid refresh token")
+    }
+
+    const newToken = await TokenService.generateAuthAdminToken(decoded.id)
+    res.status(200).json({message: "Refresh token successfully", ...newToken})
 })

@@ -6,6 +6,9 @@ dotenv.config()
 import config from "./src/config/config"
 import bodyParser from "body-parser"
 app.use(bodyParser.json())
+//Cookie parser 
+import cookieParser from "cookie-parser"
+app.use(cookieParser())
 //route
 import route from "./src/routes/index.route"
 route(app)

@@ -15,5 +15,6 @@ router
     .patch(upload.single('avatar'),uploadSingle,controller.updateAccount)
 router.patch("/:id/delete",controller.deleteAccount)
 router.post("/login",controller.loginAccount)
+router.post("/refresh-token",controller.refreshToken)
 
 export default router
