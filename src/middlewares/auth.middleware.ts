@@ -37,6 +37,7 @@ export const requireAuth = catchAync(async (req: Request, res: Response, next: N
 
 /*
 require permissions is always after require auth
+permissons is only apply for admin
 */
 export const requirePermissions = (permission: string) => {
     

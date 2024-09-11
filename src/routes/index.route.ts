@@ -5,6 +5,7 @@ import inventoryRouter from "./inventory.router"
 import accountRouter from "./account.router"
 import supplierRouter from "./supplier.router"
 import roleRouter from "./role.router"
+import settingRouter from "./setting.router"
 const path = '/api'
 
 import { requireAuth } from "../middlewares/auth.middleware"
@@ -16,4 +17,5 @@ export default (app: Express) => {
     app.use(`${path}/accounts`,accountRouter)
     app.use(`${path}/suppliers`,requireAuth,supplierRouter)
     app.use(`${path}/roles`,requireAuth,roleRouter)
+    app.use(`${path}/settings`,settingRouter)
 }
