@@ -3,6 +3,7 @@ const router: Router = Router()
 import * as controller from "../controllers/inventory.controller"
 import { validate } from "../middlewares/validate.middleware";
 import * as SchemaValidation from "../validations/inventory.validation"
+
 router
     .route("/")
     .get(validate(SchemaValidation.getInventories),controller.getInventories)

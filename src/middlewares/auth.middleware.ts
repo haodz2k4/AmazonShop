@@ -36,38 +36,23 @@ export const requireAuth = catchAync(async (req: Request, res: Response, next: N
 
 
 /*
-Permission chỉ dành cho admin
-- Ví dụ:
-User có thể call api get được vài cái như products, category, nhưng nếu cái product, category đó
-Nằm trong trang quảng trị thì phải phân quyền, có 4 quyền cơ bản CRUD  
-Vì vậy nếu là user, requirePermissions sẽ được chấp nhận còn nếu là admin nó sẽ tiến hành thông qua phân quyền 
+require permissions is always after require auth
 */
 export const requirePermissions = (permission: string) => {
     
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
 
-            if(req.headers.authorization){
-                const token = req.headers.authorization?.split(" ")[1];
-                const isBlacklist = await TokenService.checkTokenInBlackList(token);
-                
-                const decoded = TokenService.verifyToken(token) as JwtPayload;
-                if(decoded.role === 'admin'){
-                    const account = await getAccountById(decoded.id)
-                    if(!account){
-                        throw new ApiError(404,"Account is not found")
-                    }
-                    if(isBlacklist){
-                        throw new ApiError(403,"Invalid token")
-                    }
-                    const role = await getRoleById(account.roleId.toString())
-                    if(!role?.permissions.includes(permission)){
-                        throw new ApiError(403,"you do not have enough authority")
-                    }
-                    
-                }
+            const account = res.locals.account;
+            if(!account){
+                throw new ApiError(404, "Account is not found")
             }
+            const role = await getRoleById(account.RoleId);
             
+            if(!role?.permissions.includes(permission)){
+                throw new ApiError(403,"You do not have enough authority")
+            }
+            res.locals.role = role
             next() 
         } catch (error) {
             next(error)
