@@ -42,6 +42,7 @@ export const updateAccountById = async (id: string, bodyAccount: Partial<IAccoun
         throw new ApiError(404,"Account is not found")
     }
     Object.assign(account, bodyAccount)
+    await account.save()
     return account
 }
 

@@ -48,3 +48,9 @@ export const addTokenToBlacklist = async (token: string, expireTime: string | nu
 export const decodeToken = (token: string) => {
     return jwt.decode(token)
 }
+
+export const checkTokenInBlackList = async (token: string):Promise<boolean> => {
+    const cacheKey = `blacklist_${token}`
+    const cacheData = await CacheService.getCache(cacheKey)
+    return !!cacheData
+}
