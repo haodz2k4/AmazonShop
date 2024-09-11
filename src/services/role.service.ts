@@ -1,6 +1,5 @@
 import { PaginationResult } from "../helpers/paginate.helper"
 import Role, {IRole} from "../models/role.model"
-import Permission from "../models/permission.model"
 import { ApiError } from "../utils/error"
 
 interface RoleOptions {
@@ -28,7 +27,7 @@ export const createRole = async (bodyRole: IRole) => {
 }
 
 export const getRoleById = async (id: string) => {
-    return await Role.findOne({_id: id, deleted: false})
+    return await Role.findOne({_id: id, deleted: false}).populate('permissions')
 }
 
 export const updateRoleById = async (id: string, bodyRole: Partial<IRole>) => {
@@ -39,9 +38,4 @@ export const updateRoleById = async (id: string, bodyRole: Partial<IRole>) => {
     Object.assign(role,bodyRole)
     await role.save()
     return role 
-}
-
-export const getPermissions = async () => {
-    const permissons = await Permission.find();
-    return permissons
 }

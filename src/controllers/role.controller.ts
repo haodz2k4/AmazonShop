@@ -34,6 +34,12 @@ export const createRole = catchAync(async (req: Request, res: Response) => {
     res.status(201).json({message: "Created role successfully", role})
 }) 
 
+//[GET] "/api/roles/:id"
+export const getRole = catchAync(async (req: Request, res: Response) => {
+    const {id} = req.params 
+    const role = await RoleService.getRoleById(id)
+    res.json({role})
+})
 //[PATCH] "/api/roles/:id"
 export const updateRole = catchAync(async (req: Request, res: Response) => {
     const {id} = req.params 
@@ -48,10 +54,4 @@ export const deleteRole = catchAync(async (req: Request, res: Response) => {
     const {id} = req.params 
     await RoleService.updateRoleById(id, {deleted: true})
     res.status(200).json({message: "deleted role successfully"}) 
-})
-
-//[GET] "/api/roles/permissions"
-export const getPermission = catchAync(async (req: Request, res: Response) => {
-    const permissions = await RoleService.getPermissions()
-    res.json({permissions})
 })
