@@ -6,12 +6,14 @@ import accountRouter from "./account.router"
 import supplierRouter from "./supplier.router"
 import roleRouter from "./role.router"
 const path = '/api'
+
+import { requireAuth } from "../middlewares/auth.middleware"
 export default (app: Express) => {
 
     app.use(`${path}/products`,productRouter)
     app.use(`${path}/categories`,categoryRouter)
-    app.use(`${path}/inventories`,inventoryRouter)
+    app.use(`${path}/inventories`,requireAuth,inventoryRouter)
     app.use(`${path}/accounts`,accountRouter)
-    app.use(`${path}/suppliers`,supplierRouter)
-    app.use(`${path}/roles`,roleRouter)
+    app.use(`${path}/suppliers`,requireAuth,supplierRouter)
+    app.use(`${path}/roles`,requireAuth,roleRouter)
 }

@@ -4,18 +4,22 @@ const router: Router = Router()
 import multer from "multer"
 const upload = multer()
 import { uploadSingle } from "../middlewares/uploadCloud.middleware";
+import { requireAuth, requirePermissions } from "../middlewares/auth.middleware";
 router
     .route("")
-    .get(controller.getAccounts)
-    .post(upload.single('avatar'),uploadSingle,controller.createAccount)
+    .get(requireAuth,requirePermissions('account_view'),controller.getAccounts)
+    .post(requireAuth,requirePermissions('account_create'),upload.single('avatar'),uploadSingle,controller.createAccount) 
+
+    
 router.get("/logout",controller.logout)
-router
-    .route("/:id")
-    .get(controller.getAccount)
-    .patch(upload.single('avatar'),uploadSingle,controller.updateAccount)
-router.patch("/:id/delete",controller.deleteAccount)
 router.post("/login",controller.loginAccount)
 router.post("/refresh-token",controller.refreshToken) 
+
+router
+    .route("/:id")
+    .get(requireAuth,requirePermissions('account_view'),controller.getAccount)
+    .patch(requireAuth,requirePermissions('account_update'),upload.single('avatar'),uploadSingle,controller.updateAccount)
+router.patch("/:id/delete",requireAuth,requirePermissions('account_delete'),controller.deleteAccount)
 
 
 export default router
