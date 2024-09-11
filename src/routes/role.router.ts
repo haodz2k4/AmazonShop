@@ -11,5 +11,6 @@ router
     .patch(controller.updateRole)
 
 router.patch("/:id/delete",controller.deleteRole)
+router.get("/permissions",controller.getPermission)
 export default router
     

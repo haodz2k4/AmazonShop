@@ -1,5 +1,6 @@
 import { PaginationResult } from "../helpers/paginate.helper"
 import Role, {IRole} from "../models/role.model"
+import Permission from "../models/permission.model"
 import { ApiError } from "../utils/error"
 
 interface RoleOptions {
@@ -38,4 +39,9 @@ export const updateRoleById = async (id: string, bodyRole: Partial<IRole>) => {
     Object.assign(role,bodyRole)
     await role.save()
     return role 
+}
+
+export const getPermissions = async () => {
+    const permissons = await Permission.find();
+    return permissons
 }

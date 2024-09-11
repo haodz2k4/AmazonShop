@@ -49,3 +49,9 @@ export const deleteRole = catchAync(async (req: Request, res: Response) => {
     await RoleService.updateRoleById(id, {deleted: true})
     res.status(200).json({message: "deleted role successfully"}) 
 })
+
+//[GET] "/api/roles/permissions"
+export const getPermission = catchAync(async (req: Request, res: Response) => {
+    const permissions = await RoleService.getPermissions()
+    res.json({permissions})
+})
