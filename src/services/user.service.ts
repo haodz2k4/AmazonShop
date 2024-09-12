@@ -55,8 +55,12 @@ export const loginUser = async (email: string, password: string) => {
 }
 
 export const addAddress= async (bodyAddress: IAddress) => {
-    return (await Address.create(bodyAddress)).populate('userId')
+    return await Address.create(bodyAddress)
 }   
+
+export const getAddressByUserid = async (userId: string) => {
+    return await Address.find({userId})
+}
 
 export const removeAddress = async (addressId: string ) => {
     const address = await Address.deleteOne({_id: addressId})

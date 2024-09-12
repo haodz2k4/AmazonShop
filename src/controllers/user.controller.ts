@@ -109,6 +109,14 @@ export const addAddress = catchAync(async (req: Request, res: Response) => {
     res.status(200).json({message: "Added address ", address})
 })
 
+//[GET] "/api/users/:id/address"
+export const getAddresses = catchAync(async (req: Request, res: Response) => {
+    const {id} = req.params 
+    const addresses = await UserService.getAddressByUserid(id)
+
+    res.status(200).json({addresses})
+})
+
 //[DELETE] "/api/users/address/:id"
 export const removeAddress = catchAync(async (req: Request, res: Response) => {
     const {id} = req.params

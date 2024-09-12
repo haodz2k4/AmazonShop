@@ -19,8 +19,10 @@ router
     .route("/:id")
     .get(requireAuth,requirePermissions('user_view'),controller.getUser)
     .patch(requireAuth,requirePermissions('user_edit'),upload.single('avatar'),uploadSingle,controller.updateUser)
+
+router.get("/:id/addresses",controller.getAddresses)
 router
-    .route("/address")
+    .route("/addresses")
     .post(requireAuth,controller.addAddress)
 router
     .route("/address/:id")
