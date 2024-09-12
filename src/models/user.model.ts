@@ -2,7 +2,7 @@ import { Schema, model, Model } from "mongoose";
 import {isURL, isMobilePhone, isEmail} from "validator"
 import { compare, hash } from "bcrypt";
 import toJSONPlugin from "./plugins/toJSON.plugin";
-interface IUser {
+export interface IUser {
     _id: Schema.Types.ObjectId
     firstName: string,
     lastName: string,

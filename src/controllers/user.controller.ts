@@ -4,6 +4,7 @@ import pick from "../utils/pick";
 import paginateHelper from "../helpers/paginate.helper";
 import * as UserService from "../services/user.service";
 import { buildRegExp } from "../utils/regExp";
+import { ApiError } from "../utils/error";
 
 //[GET] "/api/users"
 export const getUsers = catchAync(async (req: Request, res: Response) => {
@@ -41,4 +42,37 @@ export const getUsers = catchAync(async (req: Request, res: Response) => {
 
     const users = await UserService.getUsersByQuery({filter: {...filter,...find}, pagination, sort, selectFields})
     res.json({users})
+})
+
+//[POST] "/api/users"
+export const createUser = catchAync(async (req: Request, res: Response) => {
+    const body = req.body 
+
+    const user = await UserService.createUser(body)
+    res.status(201).json({message: "create user successfully", user})
+})
+
+//[PATCH] "/api/users/:id"
+export const updateUser = catchAync(async (req: Request, res: Response) => {
+    const {id} = req.params 
+    const body = req.body 
+    const user = await UserService.updateUserById(id,body)
+    res.status(200).json({message: "Updated user successfully", user})
+})
+
+//[PATCH] "/api/users/:id"
+export const getUser = catchAync(async (req: Request, res: Response) => {
+    const {id} = req.params 
+    const user = await UserService.getUserById(id);
+    if(!user){
+        throw new ApiError(404,"User is not found")
+    }
+    res.json({user})
+})
+
+//[PATCH] "/api/users/:id"
+export const deleteUser = catchAync(async (req: Request, res: Response) => {
+    const {id} = req.params
+    const user = await UserService.updateUserById(id, {deleted: true})
+    res.status(200).json({message: "Deleted user successfully", user})
 })

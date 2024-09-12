@@ -1,5 +1,6 @@
 import { PaginationResult } from "../helpers/paginate.helper"
-import User from "../models/user.model"
+import User, {IUser} from "../models/user.model"
+import { ApiError } from "../utils/error"
 
 interface UserOptions {
     filter: Record<string, any>,
@@ -19,4 +20,23 @@ export const getUsersByQuery = async (options: UserOptions) => {
 
 export const getTotalDocument = async (query?: Record<string, any>) => {
     return await User.countDocuments(query)
+}
+
+export const getUserById = async (id: string) => {
+    return await User.findOne({_id: id, deleted: false})
+}
+
+export const createUser = async (bodyUser: IUser) => {
+    return await User.create(bodyUser)
+}
+
+export const updateUserById = async (id: string, bodyUser: Partial<IUser>) => {
+    const user = await getUserById(id)
+    if(!user){
+        throw new ApiError(404,"User is not found")
+    }
+    Object.assign(user,bodyUser)
+    await user.save()
+    return user 
+
 }
