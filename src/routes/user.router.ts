@@ -19,7 +19,13 @@ router
     .route("/:id")
     .get(requireAuth,requirePermissions('user_view'),controller.getUser)
     .patch(requireAuth,requirePermissions('user_edit'),upload.single('avatar'),uploadSingle,controller.updateUser)
-    
+router
+    .route("/address")
+    .post(requireAuth,controller.addAddress)
+router
+    .route("/address/:id")
+    // .delete(requireAuth,controller.removeAddress)
+
 
 //soft deleted
 router.patch("/:id/delete",requireAuth,requirePermissions('user_delete'),controller.deleteUser)

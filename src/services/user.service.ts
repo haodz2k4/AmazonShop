@@ -1,5 +1,6 @@
 import { PaginationResult } from "../helpers/paginate.helper"
 import User, {IUser} from "../models/user.model"
+import Address, {IAddress} from "../models/address.model"
 import { ApiError } from "../utils/error"
 
 interface UserOptions {
@@ -52,3 +53,15 @@ export const loginUser = async (email: string, password: string) => {
     }
     return user 
 }
+
+export const addAddressByUser= async (bodyAddress: IAddress) => {
+    return (await Address.create(bodyAddress)).populate('userId')
+}   
+
+// export const deleteAddressByUser = async (id: string, addressId: string ) => {
+//     const user = await User.findOneAndUpdate({_id: id, address: {_id: addressId}},{$pop: {address: {_id: addressId}}})
+//     if(!user){
+//         throw new ApiError(404,"Address is not found")
+//     }
+//     return user 
+// }

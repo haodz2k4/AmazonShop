@@ -2,6 +2,7 @@ import { Schema, model, Model } from "mongoose";
 import {isURL, isMobilePhone, isEmail} from "validator"
 import { compare, hash } from "bcrypt";
 import toJSONPlugin from "./plugins/toJSON.plugin";
+
 export interface IUser {
     _id: Schema.Types.ObjectId
     firstName: string,
@@ -11,11 +12,6 @@ export interface IUser {
     password: string,
     phone: string,
     birthDate: Date,
-    address: [{
-        city: string,
-        street: string,
-        district: string 
-    }],
     defaultAddress: number,
     gender: "nam" | "nữ",
     status: "active" | "inactive",
@@ -82,16 +78,6 @@ const userSchema = new Schema<IUser,UserModel,IUserMethod>({
     birthDate: {
         type: Date, 
         required: true
-    },
-    address: [{
-            city: {type: String},
-            street: {type: String},
-            district: {type: String} 
-        }
-    ],
-    defaultAddress: {
-        type: Number,
-        default: 0
     },
     gender: {type: String, enum: ["nam","nữ"]},
     status: {type: String, enum: ["active","inactive"], default: "active"},
