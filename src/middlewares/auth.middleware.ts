@@ -4,6 +4,7 @@ import { ApiError } from "../utils/error"
 import * as TokenService from "../services/token.service"
 import { JwtPayload } from "jsonwebtoken"
 import { getAccountById } from "../services/account.service"
+import { getUserById } from "../services/user.service"
 import { getRoleById } from "../services/role.service"
 
 
@@ -19,6 +20,7 @@ export const requireAuth = catchAync(async (req: Request, res: Response, next: N
     if(isBlacklist){
         throw new ApiError(403,"Invalid token")
     }
+    console.log(id, role)
     if(role === 'admin'){
         const account = await getAccountById(id)
         if(!account){
@@ -27,7 +29,11 @@ export const requireAuth = catchAync(async (req: Request, res: Response, next: N
         res.locals.account = account
         
     }else {
-
+        const user = await getUserById(id)
+        if(!user){
+            throw new ApiError(401,"user is not found")
+        }
+        res.locals.user = user 
     }
 
     next()

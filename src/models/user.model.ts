@@ -26,7 +26,8 @@ export interface IUser {
 interface IUserMethod {
     isPasswordMatch(password: string): Promise<boolean>
 }
-const userSchema = new Schema<IUser,{},IUserMethod>({
+type UserModel = Model<IUser, UserModel, IUserMethod>
+const userSchema = new Schema<IUser,UserModel,IUserMethod>({
     firstName: {type: String, required: true,minlength: 1, maxlength: 20},
     lastName: {type: String, required: true,minlength: 1, maxlength: 20},
     email: {
@@ -116,4 +117,4 @@ userSchema.pre('save', async function(next) {
 })
 
 
-export default model<IUser>('user',userSchema)
+export default model<IUser,UserModel>('user',userSchema)

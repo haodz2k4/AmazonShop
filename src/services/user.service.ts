@@ -22,6 +22,10 @@ export const getTotalDocument = async (query?: Record<string, any>) => {
     return await User.countDocuments(query)
 }
 
+const getUserByEmail = async (email: string) => {
+    return User.findOne({email})
+}
+
 export const getUserById = async (id: string) => {
     return await User.findOne({_id: id, deleted: false})
 }
@@ -39,4 +43,12 @@ export const updateUserById = async (id: string, bodyUser: Partial<IUser>) => {
     await user.save()
     return user 
 
+}
+
+export const loginUser = async (email: string, password: string) => {
+    const user = await getUserByEmail(email)
+    if(!user || !user.isPasswordMatch(password)){
+        throw new ApiError(401,"Incorrect email or password")
+    }
+    return user 
 }

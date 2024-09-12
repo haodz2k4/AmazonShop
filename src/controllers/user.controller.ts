@@ -3,6 +3,7 @@ import catchAync from "../utils/catchAync";
 import pick from "../utils/pick";
 import paginateHelper from "../helpers/paginate.helper";
 import * as UserService from "../services/user.service";
+import * as TokenService from "../services/token.service"
 import { buildRegExp } from "../utils/regExp";
 import { ApiError } from "../utils/error";
 
@@ -76,3 +77,26 @@ export const deleteUser = catchAync(async (req: Request, res: Response) => {
     const user = await UserService.updateUserById(id, {deleted: true})
     res.status(200).json({message: "Deleted user successfully", user})
 })
+
+//[GET] "/api/users/profiles"
+export const getProfileUser = catchAync(async (req: Request, res: Response) => {
+    const user = res.locals.user 
+    res.json({user})
+})
+
+//[GET] "/api/users/profiles"
+export const updateProfileUser = catchAync(async (req: Request, res: Response) => {
+    const user = res.locals.user 
+    const body = req.body
+    const userAfterUpdate = await UserService.updateUserById(user.id,body)
+    res.json(200).json({user: userAfterUpdate})
+})
+
+//[POST] "/api/users/login"
+export const loginUser = catchAync(async (req: Request, res: Response) => {
+    const {email, password}= req.body 
+    const user = await UserService.loginUser(email, password)
+    const token = await TokenService.generateAuthUserToken(user.id)
+
+    res.status(200).json({message: "Login successfull",user, token})
+}) 

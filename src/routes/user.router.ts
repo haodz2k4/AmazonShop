@@ -4,13 +4,23 @@ import * as controller from "../controllers/user.controller"
 import multer = require("multer")
 const upload = multer()
 import { uploadSingle } from "../middlewares/uploadCloud.middleware"
+import { requireAuth, requirePermissions } from "../middlewares/auth.middleware"
+
+router.post("/login",controller.loginUser)
 router
     .route("/")
-    .get(controller.getUsers) 
+    .get(requireAuth,requirePermissions('user_view'),controller.getUsers) 
     .post(upload.single('avatar'),uploadSingle,controller.createUser)
 router
+    .route("/profiles")
+    .get(requireAuth, controller.getProfileUser)
+    .patch(requireAuth, controller.updateProfileUser)
+router
     .route("/:id")
-    .get(controller.getUser)
-    .patch(upload.single('avatar'),uploadSingle,controller.updateUser)
-router.patch("/:id/delete",controller.deleteUser)
+    .get(requireAuth,requirePermissions('user_view'),controller.getUser)
+    .patch(requireAuth,requirePermissions('user_edit'),upload.single('avatar'),uploadSingle,controller.updateUser)
+    
+
+//soft deleted
+router.patch("/:id/delete",requireAuth,requirePermissions('user_delete'),controller.deleteUser)
 export default router

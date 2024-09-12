@@ -16,7 +16,20 @@ export const generateToken = (
     return jwt.sign(payload,secretKey,{expiresIn})
 }
 
+export const generateAuthUserToken = async (userId: string) => {
+    const role ='user'
+    const accessToken = generateToken(userId, role,config.jwt.accessExpires as string)
 
+    const refreshToken = generateToken(userId, role, config.jwt.refreshExpires as string)
+    const ttl = ms(config.jwt.refreshExpires as string) / 1000 
+    await CacheService.setCache(`refreshToken:${role}:${userId}`,ttl,refreshToken)
+    return  {
+        token: {
+            accessToken,
+            refreshToken
+        }
+    }
+}
 
 export const generateAuthAdminToken = async (accountId: string) => {
     const role = 'admin'    
