@@ -54,14 +54,13 @@ export const loginUser = async (email: string, password: string) => {
     return user 
 }
 
-export const addAddressByUser= async (bodyAddress: IAddress) => {
+export const addAddress= async (bodyAddress: IAddress) => {
     return (await Address.create(bodyAddress)).populate('userId')
 }   
 
-// export const deleteAddressByUser = async (id: string, addressId: string ) => {
-//     const user = await User.findOneAndUpdate({_id: id, address: {_id: addressId}},{$pop: {address: {_id: addressId}}})
-//     if(!user){
-//         throw new ApiError(404,"Address is not found")
-//     }
-//     return user 
-// }
+export const removeAddress = async (addressId: string ) => {
+    const address = await Address.deleteOne({_id: addressId})
+    if(address.deletedCount == 0){
+        throw new ApiError(400,"Address is not found")
+    }
+}

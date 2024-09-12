@@ -105,16 +105,13 @@ export const loginUser = catchAync(async (req: Request, res: Response) => {
 export const addAddress = catchAync(async (req: Request, res: Response) => {
     const userId = res.locals.user.id 
     const {city, street, district} = req.body
-    const address = await UserService.addAddressByUser({userId, city, street, district})
+    const address = await UserService.addAddress({userId, city, street, district})
     res.status(200).json({message: "Added address ", address})
 })
 
-// //[DELETE] "/api/users/address/:id"
-// export const removeAddress = catchAync(async (req: Request, res: Response) => {
-//     const userId = res.locals.user.id 
-//     const addressId = req.params.id 
-//     console.log(userId)
-//     console.log(addressId)
-//     const user = await UserService.deleteAddressByUser(userId, addressId)
-//     res.status(200).json({message: "Remove address successfull", user})
-// })
+//[DELETE] "/api/users/address/:id"
+export const removeAddress = catchAync(async (req: Request, res: Response) => {
+    const {id} = req.params
+    await UserService.removeAddress(id)
+    res.status(200).json({message: "Remove address successfull"})
+})

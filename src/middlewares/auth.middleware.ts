@@ -20,7 +20,6 @@ export const requireAuth = catchAync(async (req: Request, res: Response, next: N
     if(isBlacklist){
         throw new ApiError(403,"Invalid token")
     }
-    console.log(id, role)
     if(role === 'admin'){
         const account = await getAccountById(id)
         if(!account){

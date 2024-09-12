@@ -24,7 +24,7 @@ router
     .post(requireAuth,controller.addAddress)
 router
     .route("/address/:id")
-    // .delete(requireAuth,controller.removeAddress)
+    .delete(requireAuth,controller.removeAddress)
 
 
 //soft deleted
