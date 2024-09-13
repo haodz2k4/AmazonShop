@@ -18,3 +18,11 @@ export const addProductToCart = catchAync(async (req: Request, res: Response) =>
     const cart = await CartService.addProductToCartByuserid(userId,productId,quantity)
     res.status(200).json({cart})
 })
+
+//[DELETE] "/api/cart/:productId"
+export const removeProductFromCart = catchAync(async (req: Request, res: Response) => {
+    const {productId} = req.params 
+    const userId = res.locals.user.id 
+    await CartService.removeProductFromCart(userId, productId)
+    res.status(200).json({message: "Removed product from cart successfully"})
+})

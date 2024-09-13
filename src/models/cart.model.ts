@@ -1,10 +1,10 @@
-import { ObjectId, Schema, model } from "mongoose";
+import { Types, Schema, model } from "mongoose";
 import Product from "../models/product.model"
 import toJSONPlugin from "./plugins/toJSON.plugin";
 export interface ICart {
-    userId: ObjectId,
+    userId: Types.ObjectId,
     products: {
-        productId: ObjectId,
+        productId: Types.ObjectId,
         quantity: number
     }[]
 }
