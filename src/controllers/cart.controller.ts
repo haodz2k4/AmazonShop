@@ -23,6 +23,23 @@ export const addProductToCart = catchAync(async (req: Request, res: Response) =>
 export const removeProductFromCart = catchAync(async (req: Request, res: Response) => {
     const {productId} = req.params 
     const userId = res.locals.user.id 
-    await CartService.removeProductFromCart(userId, productId)
-    res.status(200).json({message: "Removed product from cart successfully"})
+    console.log("OWWW")
+    const cart = await CartService.removeProductFromCart(userId, productId)
+    res.status(200).json({message: "Removed product from cart successfully", cart})
+}) 
+
+//[PATCH] "/api/cart/:productId"
+export const updateProductFromCart = catchAync(async (req: Request, res: Response) => {
+    const {productId} = req.params 
+    const quantity = req.body.quantity
+    const userId = res.locals.user.id 
+    const cart = await CartService.updateProductFromCart(userId,productId, quantity)
+    res.status(200).json({message: "Updated product from cart successfullu", cart})
+})
+//[DELETE] "/api/cart/clear"
+export const clearProductFromCart = catchAync(async (req: Request, res: Response) => {
+    const userId = res.locals.user.id 
+    console.log("RUN HERE")
+    const cart = await CartService.updateCartByUserid(userId,{products: []})
+    res.status(200).json({message: "Cleared all product from cart successfully", cart})
 })

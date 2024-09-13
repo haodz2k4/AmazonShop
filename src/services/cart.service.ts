@@ -32,6 +32,24 @@ export const addProductToCartByuserid = async (userId: string,productId: string,
     }
 }
 
+export const updateProductFromCart = async (userId: string, productId: string, quantity: number) => {
+    const cart = await Cart.findOneAndUpdate({userId,products: {productId}},{quantity})
+    if(!cart){
+        throw new ApiError(404,"Cart is not found")
+    }
+    return cart 
+}
+
+export const updateCartByUserid = async (userId: string, bodyCart: Partial<ICart>) => {
+    const cart = await getCartByUserid(userId)
+    if(!cart){
+        throw new ApiError(404,"Cart is not found")
+    }
+    Object.assign(cart, bodyCart)
+    await cart.save()
+    return cart 
+}
+
 export const removeProductFromCart = async(userId: string, productId: string) => {
     const cart = await Cart.findOneAndUpdate({userId},{$pull: {products: {productId: productId}}}, {new: true})
     if(!cart){
