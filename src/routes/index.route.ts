@@ -7,6 +7,7 @@ import supplierRouter from "./supplier.router"
 import roleRouter from "./role.router"
 import settingRouter from "./setting.router"
 import userRouter from "./user.router"
+import cartRouter from "./cart.router"
 const path = '/api'
 
 import { requireAuth } from "../middlewares/auth.middleware"
@@ -20,4 +21,5 @@ export default (app: Express) => {
     app.use(`${path}/roles`,requireAuth,roleRouter)
     app.use(`${path}/settings`,settingRouter)
     app.use(`${path}/users`,userRouter)
+    app.use(`${path}/cart`,requireAuth,cartRouter)
 }
