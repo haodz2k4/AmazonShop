@@ -3,6 +3,7 @@ import catchAync from "../utils/catchAync";
 import pick from "../utils/pick";
 import paginateHelper from "../helpers/paginate.helper";
 import * as UserService from "../services/user.service";
+import {createCart} from "../services/cart.service"
 import * as TokenService from "../services/token.service"
 import { buildRegExp } from "../utils/regExp";
 import { ApiError } from "../utils/error";
@@ -50,7 +51,9 @@ export const createUser = catchAync(async (req: Request, res: Response) => {
     const body = req.body 
 
     const user = await UserService.createUser(body)
-    res.status(201).json({message: "create user successfully", user})
+    //after create the user we have to create a shopping cart 
+    const cart = await createCart({userId: user.id})
+    res.status(201).json({message: "create user successfully", user, cart})
 })
 
 //[PATCH] "/api/users/:id"
