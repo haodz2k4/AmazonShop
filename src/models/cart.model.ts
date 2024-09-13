@@ -1,8 +1,9 @@
 import { ObjectId, Schema, model } from "mongoose";
 import Product from "../models/product.model"
+import toJSONPlugin from "./plugins/toJSON.plugin";
 export interface ICart {
     userId: ObjectId,
-    products?: {
+    products: {
         productId: ObjectId,
         quantity: number
     }[]
@@ -13,7 +14,7 @@ const cartSchema = new Schema<ICart>({
     products: [{
         productId: {
             type: Schema.Types.ObjectId,
-            ref: 'Product',
+            ref: 'product',
             required: [true, 'Product ID is required'],
             validate: {
                 validator:async function(data):Promise<boolean> {
@@ -21,10 +22,12 @@ const cartSchema = new Schema<ICart>({
                     return !!product
                 },
                 message: 'Product is not exists'
-            }
+            },
         },
         quantity: { type: Number, default: 1 }
     }]
 })
+
+cartSchema.plugin(toJSONPlugin)
 
 export default model('cart',cartSchema)

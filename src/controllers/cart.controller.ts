@@ -7,8 +7,14 @@ import { ApiError } from "../utils/error";
 export const getCart = catchAync(async (req: Request, res: Response) => {
     const userId = res.locals.user.id 
     const cart = await CartService.getCartByUserid(userId)
-    if(!cart){
-        throw new ApiError(404,"Cart is not found")
-    }
     res.status(200).json({cart})
 }) 
+
+//[POST] "/api/cart/:productId" 
+export const addProductToCart = catchAync(async (req: Request, res: Response) => {
+    const {productId} = req.params 
+    const quantity = req.body.quantity || 1
+    const userId = res.locals.user.id 
+    const cart = await CartService.addProductToCartByuserid(userId,productId,quantity)
+    res.status(200).json({cart})
+})

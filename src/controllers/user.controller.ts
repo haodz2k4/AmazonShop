@@ -51,9 +51,7 @@ export const createUser = catchAync(async (req: Request, res: Response) => {
     const body = req.body 
 
     const user = await UserService.createUser(body)
-    //after create the user we have to create a shopping cart 
-    const cart = await createCart({userId: user.id})
-    res.status(201).json({message: "create user successfully", user, cart})
+    res.status(201).json({message: "create user successfully", user})
 })
 
 //[PATCH] "/api/users/:id"
