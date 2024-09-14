@@ -1,6 +1,7 @@
 import { ObjectId, Schema, model } from "mongoose";
-
+import toJSONPlugin from "./plugins/toJSON.plugin";
 export interface IAddress {
+    _id?: ObjectId,
     userId: ObjectId,
     city: string,
     street: string,
@@ -22,5 +23,7 @@ const addressSchema = new Schema<IAddress>({
         required: true
     }
 })
+
+addressSchema.plugin(toJSONPlugin)
 
 export default model<IAddress>('address',addressSchema)

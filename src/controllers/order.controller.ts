@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import catchAync from "../utils/catchAync";
 import * as OrderService from "../services/order.service"
 import paginateHelper from "../helpers/paginate.helper";
+import * as UserService from "../services/user.service"
 import { ApiError } from "../utils/error";
 import pick from "../utils/pick";
 
@@ -42,4 +43,27 @@ export const getOrders = catchAync(async (req: Request, res: Response) => {
     }
 })
 
+//[POST] "/api/orders"
+export const createOrder = catchAync(async (req: Request, res: Response) => {
+    const body = req.body
+    
+    const user = res.locals.user
+    body.userId = user.id
+    const order = await OrderService.createOrder(body)
+    res.status(201).json({message: "created order successfully", order})
+})
+
+//[GET] "/api/orders/:id"
+export const getOrder = catchAync(async (req: Request, res: Response) => {
+    const user = res.locals.user 
+    const {id} =req.params 
+    if(user){
+        const order = await OrderService.getOrderByUserIdAndOrderId(user.id,id)
+        
+        res.json({order})
+    }else{
+        const order = await OrderService.getOrderById(id)
+        res.json({order})
+    }
+})
 

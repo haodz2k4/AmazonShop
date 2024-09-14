@@ -1,64 +1,56 @@
 import { Types, Schema, model } from "mongoose";
-
-interface IOrder {
-    _id: Types.ObjectId,
-    user_id: Types.ObjectId,
-    address: {
-        city: string,
-        street: string,
-        district: string,
-    },
+import Address from "../models/address.model"
+import User from "../models/user.model"
+import Product from "../models/product.model"
+import { ApiError } from "../utils/error";
+export interface IOrder {
+    _id?: Types.ObjectId,
+    userId: Types.ObjectId,
+    addressId: Types.ObjectId,
     products: {
         productId: Types.ObjectId,
-        price: number,
-        discountPercentage: number,
         quantity: number,
     }[],
     status: string
 }
 
 const orderSchema = new Schema<IOrder>({
-    user_id: { 
+    userId: { 
         type: Schema.Types.ObjectId, 
         ref: 'user', 
-        required: true 
+        required: true,
+        validate: {
+            validator: async function(val) {
+                const user = await User.findOne({_id: val, deleted: false})
+                return !!user  
+            },
+            message: 'user is not exists'
+        }
     },
-    address: {
-        city: { 
-            type: String, 
-            required: true 
-        },
-        street: { 
-            type: String, 
-            required: true 
-        },
-        district: { 
-            type: String, 
-            required: true 
+    addressId: {
+        type: Schema.Types.ObjectId, 
+        validate: {
+            validator: async function(val) {
+                const address = await Address.findById(val)
+                return !!address
+            },
+            message: 'address is not exists'
         }
     },
     products: [{
         productId: {
-            type: Schema.Types.ObjectId, 
+            type: Schema.Types.ObjectId,
+            required: true, 
             ref: 'product',
-            required: true 
+            validate: {
+                validator: async function(val) {
+                    const product = await Product.findById(val)
+                    return !!product
+                },
+                message: 'product is not found'
+            }
         },
-        price: {
-            type: Number, 
-            min: 0, 
-            required: true 
-        },
-        discountPercentage: {
-            type: Number, 
-            min: 0, 
-            max: 100, 
-            default: 0 
-        },
-        quantity: {
-            type: Number, 
-            min: 1, 
-            required: true 
-        }
+        quantity: {type: Number, min: 1}
     }],
     status: {
         type: String,
@@ -67,5 +59,18 @@ const orderSchema = new Schema<IOrder>({
         required: true
     }
 }, {timestamps: true}); 
+
+orderSchema.pre('save', async function(next) {
+    
+    const address = await Address.findOne({
+        userId: this.userId,
+        isDefault: true 
+    }) 
+    if(!address){
+        throw new ApiError(404,"User is not have any address or not any default address")
+    }
+    this.addressId = address?.id
+
+})
 
 export default model<IOrder>('order', orderSchema);

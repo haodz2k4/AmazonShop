@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-
+import toJSONPlugin from "./plugins/toJSON.plugin";
 export interface ISettingGeneral {
     websiteName: string,
     logo: string,
@@ -17,6 +17,7 @@ const settingGeneralSchema = new Schema<ISettingGeneral>({
     address: {type: String, required: true},
     copyRight: {type: String, required: true},
 
-}) 
+})
+settingGeneralSchema.plugin(toJSONPlugin) 
 
 export default model('settings',settingGeneralSchema)

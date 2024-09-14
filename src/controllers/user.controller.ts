@@ -113,7 +113,7 @@ export const addAddress = catchAync(async (req: Request, res: Response) => {
 //[GET] "/api/users/:id/address"
 export const getAddresses = catchAync(async (req: Request, res: Response) => {
     const {id} = req.params 
-    const addresses = await UserService.getAddressByUserid(id)
+    const addresses = await UserService.getAddressesByUserid(id)
 
     res.status(200).json({addresses})
 })

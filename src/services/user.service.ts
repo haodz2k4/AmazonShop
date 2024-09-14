@@ -58,8 +58,12 @@ export const addAddress= async (bodyAddress: IAddress) => {
     return await Address.create(bodyAddress)
 }   
 
-export const getAddressByUserid = async (userId: string) => {
+export const getAddressesByUserid = async (userId: string) => {
     return await Address.find({userId})
+}
+
+export const getDefaultAddressByUserId = async (userId: string) => {
+    return await Address.findOne({userId, isDefault: true})
 }
 
 export const removeAddress = async (addressId: string ) => {
