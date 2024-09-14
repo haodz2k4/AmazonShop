@@ -23,7 +23,6 @@ export const addProductToCart = catchAync(async (req: Request, res: Response) =>
 export const removeProductFromCart = catchAync(async (req: Request, res: Response) => {
     const {productId} = req.params 
     const userId = res.locals.user.id 
-    console.log("OWWW")
     const cart = await CartService.removeProductFromCart(userId, productId)
     res.status(200).json({message: "Removed product from cart successfully", cart})
 }) 
@@ -39,7 +38,6 @@ export const updateProductFromCart = catchAync(async (req: Request, res: Respons
 //[DELETE] "/api/cart/clear"
 export const clearProductFromCart = catchAync(async (req: Request, res: Response) => {
     const userId = res.locals.user.id 
-    console.log("RUN HERE")
     const cart = await CartService.updateCartByUserid(userId,{products: []})
     res.status(200).json({message: "Cleared all product from cart successfully", cart})
 })

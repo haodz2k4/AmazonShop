@@ -9,6 +9,7 @@ import settingRouter from "./setting.router"
 import userRouter from "./user.router"
 import cartRouter from "./cart.router"
 import orderRouter from "./order.router"
+import favoriteRouter from "./favorite.router"
 const path = '/api'
 
 import { requireAuth } from "../middlewares/auth.middleware"
@@ -22,6 +23,7 @@ export default (app: Express) => {
     app.use(`${path}/roles`,requireAuth,roleRouter)
     app.use(`${path}/settings`,settingRouter)
     app.use(`${path}/users`,userRouter)
+    app.use(`${path}/favorites`,requireAuth,favoriteRouter)
     app.use(`${path}/cart`,requireAuth,cartRouter)
     app.use(`${path}/orders`,requireAuth,orderRouter)
 }
