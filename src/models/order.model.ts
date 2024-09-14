@@ -70,7 +70,7 @@ orderSchema.pre('save', async function(next) {
         throw new ApiError(404,"User is not have any address or not any default address")
     }
     this.addressId = address?.id
-
+    next()
 })
 
 export default model<IOrder>('order', orderSchema);
