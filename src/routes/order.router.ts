@@ -10,5 +10,6 @@ router
 router
     .route("/:id")
     .get(controller.getOrder) 
-    
+
+router.patch("/:id/:status",controller.changeStatus)
 export default router 

@@ -1,6 +1,7 @@
 import { PaginationResult } from "../helpers/paginate.helper"
 import Order, {IOrder} from "../models/order.model"
 import catchAync from "../utils/catchAync"
+import { ApiError } from "../utils/error"
 interface OrderOptions {
     filter: Record<string,any>,
     pagination?: PaginationResult,
@@ -30,6 +31,17 @@ export const createOrder = async (bodyOrder: IOrder) => {
 export const getOrderById = async (id: string) => {
     return await Order.findById(id)
 }
+
+export const updateOrderById = async (id: string, bodyOrder: Partial<IOrder>) => {
+    const order = await getOrderById(id)
+    if(!order){
+        throw new ApiError(404,"Order is not found")
+    }
+    Object.assign(order, bodyOrder)
+    await order.save()
+    return order
+}
+
 
 export const getOrderByUserIdAndOrderId = async (userId: string, orderId: string) => {
     return await Order.findOne({_id: orderId, userId}).populate('products.productId','title thumbnail ')

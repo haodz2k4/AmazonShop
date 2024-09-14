@@ -53,6 +53,7 @@ export const createOrder = catchAync(async (req: Request, res: Response) => {
     res.status(201).json({message: "created order successfully", order})
 })
 
+//
 //[GET] "/api/orders/:id"
 export const getOrder = catchAync(async (req: Request, res: Response) => {
     const user = res.locals.user 
@@ -67,3 +68,14 @@ export const getOrder = catchAync(async (req: Request, res: Response) => {
     }
 })
 
+//[PATCH] "/api/orders/:id/:status"
+export const changeStatus = catchAync(async (req: Request, res: Response) => {
+
+    const account = res.locals.account 
+    if(!account){
+        throw new ApiError(403,"You do not have enough authority")
+    }
+    const {id, status} = req.params 
+    const order = await OrderService.updateOrderById(id, {status})
+    res.status(200).json({message: "Updated order successfully", order})
+} )

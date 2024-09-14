@@ -3,6 +3,7 @@ import Address from "../models/address.model"
 import User from "../models/user.model"
 import Product from "../models/product.model"
 import { ApiError } from "../utils/error";
+import toJSONPlugin from "./plugins/toJSON.plugin";
 export interface IOrder {
     _id?: Types.ObjectId,
     userId: Types.ObjectId,
@@ -59,6 +60,8 @@ const orderSchema = new Schema<IOrder>({
         required: true
     }
 }, {timestamps: true}); 
+
+orderSchema.plugin(toJSONPlugin)
 
 orderSchema.pre('save', async function(next) {
     
