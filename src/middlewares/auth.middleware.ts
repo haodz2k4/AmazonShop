@@ -50,15 +50,14 @@ export const requirePermissions = (permission: string) => {
         try {
 
             const account = res.locals.account;
-            if(!account){
-                throw new ApiError(404, "Account is not found")
+            if(account){
+                const role = await getRoleById(account.RoleId);
+                if(!role?.permissions.includes(permission)){
+                    throw new ApiError(403,"You do not have enough authority")
+                }
+                res.locals.role = role
             }
-            const role = await getRoleById(account.RoleId);
             
-            if(!role?.permissions.includes(permission)){
-                throw new ApiError(403,"You do not have enough authority")
-            }
-            res.locals.role = role
             next() 
         } catch (error) {
             next(error)
