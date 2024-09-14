@@ -5,7 +5,7 @@ interface OrderOptions {
     filter: Record<string,any>,
     pagination?: PaginationResult,
     sort?: Record<string, "asc" | "desc">,
-    selectField?: string
+    selectFields?: string
 }
 export const getOrdersByQuery = async (options: OrderOptions) => {
 
@@ -14,7 +14,7 @@ export const getOrdersByQuery = async (options: OrderOptions) => {
         .limit(options.pagination ? options.pagination.limit : 100)
         .skip(options.pagination ? options.pagination.skip : 0)
         .sort(options.sort)
-        .select(options.selectField || "")
+        .select(options.selectFields || "")
 }
 
 export const getTotalDocument = async (query?: Record<string, any>) => {
