@@ -9,12 +9,9 @@ import { validate } from "../middlewares/validate.middleware"
 import * as Schema from "../validations/product.validation"
 import { requireAuth, requirePermissions } from "../middlewares/auth.middleware"
 
-/*The router admin is authenticated and authorized*/
-router.get("/:id/admin",requireAuth,requirePermissions('product_view'),controllers.getProduct)
-router.get("/admin",requireAuth,requirePermissions('product_view'),controllers.getProducts)
 router
     .route("/")
-    .get(validate(Schema.getProducts),cacheMiddleware('products',3600),controllers.getProducts)
+    .get(requirePermissions('product_view'),validate(Schema.getProducts),cacheMiddleware('products',3600),controllers.getProducts)
     .post(requireAuth,requirePermissions('product_create'),upload.single('thumbnail'),uploadSingle,validate(Schema.createProduct),controllers.createProduct)
 
 router

@@ -5,5 +5,6 @@ const router: Router = Router()
 router
     .route("/")
     .get(controller.getFavorites) 
+    .post(controller.addProductToFavorite)
 
 export default router

@@ -49,13 +49,23 @@ export const requirePermissions = (permission: string) => {
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
 
-            const account = res.locals.account;
-            if(account){
-                const role = await getRoleById(account.RoleId);
-                if(!role?.permissions.includes(permission)){
-                    throw new ApiError(403,"You do not have enough authority")
+            if(req.headers.authorization){
+                const token = req.headers.authorization.split(" ")[1]
+                const decoded = TokenService.verifyToken(token) as JwtPayload
+                const isBlacklist = await TokenService.checkTokenInBlackList(token);
+                if(isBlacklist){
+                    throw new ApiError(403,"Invalid token")
                 }
-                res.locals.role = role
+                const {id, role} = decoded
+                if(role === 'admin'){
+                    const account = await getAccountById(id)
+                    const role = await getRoleById(account?.roleId.toString() as string);
+                    
+                    if(!role?.permissions.includes(permission)){
+                        throw new ApiError(403,"You do not have enough authority")
+                    }
+                    res.locals.role = role
+                }
             }
             
             next() 

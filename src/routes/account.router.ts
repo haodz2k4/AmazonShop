@@ -16,6 +16,9 @@ router.post("/login",controller.loginAccount)
 router.post("/refresh-token",controller.refreshToken) 
 
 router
+    .route("/profiles")
+    .get(controller.getProfileAccount)
+router
     .route("/:id")
     .get(requireAuth,requirePermissions('account_view'),controller.getAccount)
     .patch(requireAuth,requirePermissions('account_update'),upload.single('avatar'),uploadSingle,controller.updateAccount)

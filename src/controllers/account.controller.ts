@@ -43,6 +43,12 @@ export const getAccount = catchAync(async (req: Request, res: Response) => {
     res.status(200).json({account})
 })
 
+//[GET] "/api/accounts/profiles"
+export const getProfileAccount = catchAync(async (req: Request, res: Response) => {
+    const account = res.locals.account 
+    res.json({account})
+})
+
 //[PATCH] "/api/accounts/:id"
 export const updateAccount = catchAync(async (req: Request, res: Response) => {
     const {id} = req.params 

@@ -17,11 +17,12 @@ export const getAllAccountByQuery = async (options: AccountOptions) => {
     .skip(options.pagination.skip)
     .sort(options.sort)
     .select(options.selectFields)
+    .populate('roleId')
 }
 
 export const getAccountById = async (id: string) => {
     return await Account
-    .findOne({_id: id}, {deleted: false})
+    .findOne({_id: id}, {deleted: false}).populate('roleId')
 }
 
 export const getTotalDocument = async (query: Partial<IAccount>) => {
