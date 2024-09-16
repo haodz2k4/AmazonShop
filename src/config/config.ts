@@ -17,6 +17,16 @@ export default {
     secret: process.env.JWT_SECRET,
     accessExpires: process.env.JWT_ACCESS_EXPIRES,
     refreshExpires: process.env.JWT_REFRESH_EXPIRES
+  },
+  mail: {
+    nodemailer: {
+      service: 'gmail',
+      auth: {
+        user: process.env.SMTP_USERNAME,
+        pass: process.env.SMTP_PASS,
+      }
+    },
+    from: process.env.SMTP_PASS
   }
     
 }
