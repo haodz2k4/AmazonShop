@@ -23,7 +23,7 @@ export const getTotalDocument = async (query?: Record<string, any>) => {
     return await User.countDocuments(query)
 }
 
-const getUserByEmail = async (email: string) => {
+export const getUserByEmail = async (email: string) => {
     return User.findOne({email})
 }
 

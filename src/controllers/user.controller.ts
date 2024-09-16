@@ -3,7 +3,8 @@ import catchAync from "../utils/catchAync";
 import pick from "../utils/pick";
 import paginateHelper from "../helpers/paginate.helper";
 import * as UserService from "../services/user.service";
-import {createCart} from "../services/cart.service"
+import { sendOtpEmail } from "../services/email.service";
+import { generateRandomNumber } from "../helpers/generate.helper";
 import * as TokenService from "../services/token.service"
 import { buildRegExp } from "../utils/regExp";
 import { ApiError } from "../utils/error";
@@ -124,3 +125,20 @@ export const removeAddress = catchAync(async (req: Request, res: Response) => {
     await UserService.removeAddress(id)
     res.status(200).json({message: "Remove address successfull"})
 })
+
+//[POST] "/api/users/forgot-password"
+export const forgotPassword = catchAync(async (req: Request, res: Response) => {
+    const {email} = req.body
+    
+    const user = await UserService.getUserByEmail(email) 
+    if(!user){
+        throw new ApiError(404,"Email is not exists")
+    }
+    const otp = generateRandomNumber(6)
+    await sendOtpEmail(email,otp)
+
+    res.status(200).json({message: "Send otp successfully"})
+
+})
+
+//
