@@ -4,6 +4,7 @@ import pick from "../utils/pick";
 import paginateHelper from "../helpers/paginate.helper";
 import * as UserService from "../services/user.service";
 import { sendOtpEmail } from "../services/email.service";
+import { setCache, getCache, deleteCache } from "../services/cache.service";
 import { generateRandomNumber } from "../helpers/generate.helper";
 import * as TokenService from "../services/token.service"
 import { buildRegExp } from "../utils/regExp";
@@ -136,9 +137,23 @@ export const forgotPassword = catchAync(async (req: Request, res: Response) => {
     }
     const otp = generateRandomNumber(6)
     await sendOtpEmail(email,otp)
-
+    await setCache(`otp_${user.id}`,120,otp)
     res.status(200).json({message: "Send otp successfully"})
 
 })
 
-//
+//[POST] "/api/users/verify-otp"
+export const verifyOtp = catchAync(async (req: Request, res: Response) => {
+    const {email, otp} = req.body 
+    const user = await UserService.getUserByEmail(email) 
+    if(!user){
+        throw new ApiError(404,"Email is not exists")
+    }
+    const cacheData = await getCache(`otp_${user.id}`)
+    if(!cacheData || cacheData !== otp){
+        throw new ApiError(400,"Invalid otp")
+    }
+    await deleteCache(`otp_${user.id}`)
+    res.status(200).json({message: "Verify Otp successfully"})
+    
+})

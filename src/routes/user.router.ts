@@ -29,6 +29,7 @@ router
     .delete(requireAuth,controller.removeAddress)
 
 router.post("/forgot-password",controller.forgotPassword)
+router.post("/verify-otp",controller.verifyOtp)
 
 //soft deleted
 router.patch("/:id/delete",requireAuth,requirePermissions('user_delete'),controller.deleteUser)
