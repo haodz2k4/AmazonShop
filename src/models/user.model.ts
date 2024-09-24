@@ -12,7 +12,6 @@ export interface IUser {
     password: string,
     phone: string,
     birthDate: Date,
-    defaultAddress: number,
     gender: "nam" | "nữ",
     status: "active" | "inactive",
     deleted: boolean

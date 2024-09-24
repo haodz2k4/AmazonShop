@@ -9,6 +9,7 @@ import { generateRandomNumber } from "../helpers/generate.helper";
 import * as TokenService from "../services/token.service"
 import { buildRegExp } from "../utils/regExp";
 import { ApiError } from "../utils/error";
+import { JwtPayload } from "jsonwebtoken";
 
 //[GET] "/api/users"
 export const getUsers = catchAync(async (req: Request, res: Response) => {
@@ -154,6 +155,24 @@ export const verifyOtp = catchAync(async (req: Request, res: Response) => {
         throw new ApiError(400,"Invalid otp")
     }
     await deleteCache(`otp_${user.id}`)
-    res.status(200).json({message: "Verify Otp successfully"})
+    const token = await TokenService.generateToken(user.id,'user',120)
+    res.status(200).json({message: "Verify Otp successfully", token})
     
+})
+
+//[POST] "/api/users/reset-password"
+export const resetPassword = catchAync(async (req: Request, res: Response) => {
+    const {password} =req.body
+    const {token} = req.query
+    const decoded = await TokenService.verifyToken(token as string) as JwtPayload
+    
+    const isBlacklisted = await TokenService.checkTokenInBlackList(token as string)
+    if(!decoded || decoded.role !== 'user' || isBlacklisted){
+        throw new ApiError(404,"Invalid or expired verification token")
+    }
+    await TokenService.addTokenToBlacklist(token as string, 120)
+    
+    const user = await UserService.updateUserById(decoded.id,{password})
+    res.status(200).json({ message: "Password reset successfully", user });
+
 })

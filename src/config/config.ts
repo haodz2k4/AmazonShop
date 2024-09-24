@@ -16,7 +16,8 @@ export default {
   jwt: {
     secret: process.env.JWT_SECRET,
     accessExpires: process.env.JWT_ACCESS_EXPIRES,
-    refreshExpires: process.env.JWT_REFRESH_EXPIRES
+    refreshExpires: process.env.JWT_REFRESH_EXPIRES,
+    resetPasswordExpires: process.env.JWT_RESET_PASSWORD
   },
   mail: {
     nodemailer: {

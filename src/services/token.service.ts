@@ -49,6 +49,7 @@ export const generateAuthAdminToken = async (accountId: string) => {
     }
 }
 
+
 export const verifyToken = (token: string, secretKey: string = config.jwt.secret as string) => {
     return jwt.verify(token, secretKey)
 }
