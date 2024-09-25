@@ -54,3 +54,50 @@ export const deleteUser = {
         id: Joi.string().custom(validObjectId)
     }),
 }
+
+export const loginUser = {
+    body: Joi.object().keys({
+        email: Joi.string().email().required(),
+        password: Joi.string().email().required()
+    })
+}
+
+export const addAddress = {
+    city: Joi.string().required(),
+    street: Joi.string().required(),
+    district: Joi.string().required()
+}
+
+export const getAddress = {
+    params: Joi.object().keys({
+        id: Joi.string().custom(validObjectId)
+    })
+}
+
+export const removeAddress = {
+    params: Joi.object().keys({
+        id: Joi.string().custom(validObjectId)
+    })
+}
+
+export const forgotPassword = {
+    body: Joi.object().keys({
+        email: Joi.string().email().required()
+    })
+}
+
+export const verifyOtp = {
+    body: Joi.object().keys({
+        email: Joi.string().email().required(),
+        otp: Joi.number().integer().required()
+    })
+}
+
+export const resetPassword = {
+    body: Joi.object().keys({
+        password: Joi.string().required()
+    }),
+    query: Joi.object().keys({
+        token: Joi.string()
+    })
+}

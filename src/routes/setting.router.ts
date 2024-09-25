@@ -10,6 +10,5 @@ router
     .route("/general")
     .get(controller.getSettingGeneral) 
     .patch(requireAuth,upload.single('logo'),uploadSingle,controller.updateSettingGeneral)
-router.get("/general/admin",requireAuth,controller.getSettingGeneral)
 
 export default router
